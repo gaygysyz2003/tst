@@ -3,3 +3,6 @@ IiIiCkxheWVyLTEgbGFiIGhhcm5lc3Mg4oCUIE5va2lhIGxvY2FsIGNyZWRlbnRpYWwgbWFuYWdlbWVu
 B64
 python3 -m py_compile lab_test_layer1.py && echo "compile OK"
 md5sum lab_test_layer1.py 2>/dev/null || md5 lab_test_layer1.py
+
+grep -n "show admin user \*" lab_test_layer1.py     # NEW file has this (the * list command)
+grep -n "show admin users"   lab_test_layer1.py     # should print NOTHING (that was the broken old command)
