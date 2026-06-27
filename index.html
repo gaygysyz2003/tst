@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nokia Lab Switch Manager</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#1a2129; --panel2:#222c36; --line:#2c3a47;
+    --txt:#e6edf3; --muted:#8b9aa7; --accent:#1e88e5;
+    --free:#37474f; --green:#43a047; --yellow:#fbc02d; --red:#e53935; --grey:#78909c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--txt)}
+  header{display:flex;align-items:center;gap:18px;padding:12px 20px;
+         background:var(--panel);border-bottom:1px solid var(--line)}
+  header h1{font-size:16px;margin:0;font-weight:600;white-space:nowrap}
+  header h1 .dot{color:var(--accent)}
+  nav{display:flex;gap:6px;flex:1}
+  nav button{background:transparent;color:var(--muted);border:1px solid transparent;
+             padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px}
+  nav button:hover{color:var(--txt);background:var(--panel2)}
+  nav button.active{color:#fff;background:var(--accent);border-color:var(--accent)}
+  #conn{font-size:12px;color:var(--muted);white-space:nowrap}
+  #conn .ok{color:var(--green)} #conn .bad{color:var(--red)}
+  main{padding:20px;max-width:1100px;margin:0 auto}
+  section{display:none} section.active{display:block}
+  h2{font-size:15px;font-weight:600;margin:0 0 14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:16px;margin-bottom:18px}
+
+  /* port grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:6px}
+  .cell{position:relative;aspect-ratio:1.35;border-radius:6px;display:flex;
+        flex-direction:column;align-items:center;justify-content:center;
+        font-size:12px;font-weight:600;color:#fff;cursor:default;border:1px solid #0003}
+  .cell small{font-weight:400;font-size:10px;opacity:.9;margin-top:2px}
+  .cell.free{background:var(--free);color:var(--muted)}
+  .cell.patched{background:var(--green)}
+  .cell.expiring{background:var(--yellow);color:#222}
+  .cell.expired{background:var(--red)}
+  .cell.dbm-green{background:var(--green)} .cell.dbm-yellow{background:var(--yellow);color:#222}
+  .cell.dbm-red{background:var(--red)} .cell.dbm-grey{background:var(--grey)}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+  tr:last-child td{border-bottom:none}
+  .countdown{font-variant-numeric:tabular-nums;font-weight:600}
+  .countdown.expiring{color:var(--yellow)} .countdown.expired{color:var(--red)}
+  .muted{color:var(--muted)}
+
+  form{display:grid;gap:14px;max-width:420px}
+  label.field{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+  input,select{background:var(--panel2);border:1px solid var(--line);color:var(--txt);
+               padding:9px 11px;border-radius:6px;font-size:14px}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .field .err{color:var(--red);font-size:12px;min-height:14px}
+  button.primary{background:var(--accent);color:#fff;border:none;padding:10px 18px;
+                 border-radius:6px;font-size:14px;cursor:pointer;font-weight:600;justify-self:start}
+  button.primary:disabled{opacity:.5;cursor:not-allowed}
+  button.danger{background:var(--red);color:#fff;border:none;padding:6px 12px;
+                border-radius:5px;cursor:pointer;font-size:12px}
+  button.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+               padding:8px 14px;border-radius:6px;cursor:pointer}
+
+  #banner{display:none;background:#5d4d12;border:1px solid var(--yellow);color:#ffe082;
+          padding:9px 14px;border-radius:8px;margin-bottom:16px;font-size:13px}
+  #banner.show{display:block}
+
+  #toasts{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:50}
+  .toast{padding:11px 15px;border-radius:8px;font-size:13px;color:#fff;min-width:240px;
+         box-shadow:0 6px 20px #0006;animation:slide .2s ease}
+  .toast.error{background:var(--red)} .toast.success{background:var(--green)}
+  .toast.info{background:var(--accent)}
+  @keyframes slide{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Nokia Lab <span class="dot">●</span> Switch Manager</h1>
+  <nav>
+    <button data-view="dashboard" class="active">Port Dashboard</button>
+    <button data-view="create">Create Patch</button>
+    <button data-view="remove">Remove Patch</button>
+    <button data-view="power">Power Monitor</button>
+  </nav>
+  <span id="conn"></span>
+</header>
+
+<main>
+  <div id="banner"></div>
+
+  <!-- Dashboard -->
+  <section id="view-dashboard" class="active">
+    <div class="card">
+      <h2>Ports (1–114)</h2>
+      <div class="legend">
+        <span><i style="background:var(--free)"></i> free</span>
+        <span><i style="background:var(--green)"></i> patched</span>
+        <span><i style="background:var(--yellow)"></i> expiring (≤5m)</span>
+        <span><i style="background:var(--red)"></i> expired</span>
+      </div>
+      <div id="portGrid" class="grid"></div>
+    </div>
+    <div class="card">
+      <h2>Active Patches</h2>
+      <table>
+        <thead><tr><th>Patch</th><th>Ports</th><th>Label</th><th>Remaining</th></tr></thead>
+        <tbody id="patchRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Create -->
+  <section id="view-create">
+    <div class="card">
+      <h2>Create Patch</h2>
+      <form id="createForm" novalidate>
+        <label class="field">Port A
+          <input type="number" name="port_a" min="1" max="114" required>
+          <span class="err" data-for="port_a"></span></label>
+        <label class="field">Port B
+          <input type="number" name="port_b" min="1" max="114" required>
+          <span class="err" data-for="port_b"></span></label>
+        <label class="field">Duration (minutes)
+          <input type="number" name="duration_minutes" min="1" max="10080" value="60" required>
+          <span class="err" data-for="duration_minutes"></span></label>
+        <label class="field">Label (optional, ≤64 chars)
+          <input type="text" name="label" maxlength="64">
+          <span class="err" data-for="label"></span></label>
+        <button type="submit" class="primary">Create Patch</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Remove -->
+  <section id="view-remove">
+    <div class="card">
+      <h2>Remove Patch</h2>
+      <table>
+        <thead><tr><th>Patch</th><th>Ports</th><th>Label</th><th>Remaining</th><th></th></tr></thead>
+        <tbody id="removeRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Power -->
+  <section id="view-power">
+    <div class="card">
+      <h2>Power Monitor (dBm)
+        <button id="refreshPower" class="ghost" style="float:right">Refresh</button></h2>
+      <div class="legend">
+        <span><i style="background:var(--green)"></i> &gt; -10</span>
+        <span><i style="background:var(--yellow)"></i> -30 … -10</span>
+        <span><i style="background:var(--red)"></i> &lt; -30</span>
+        <span><i style="background:var(--grey)"></i> no reading</span>
+      </div>
+      <div id="powerGrid" class="grid"></div>
+    </div>
+  </section>
+</main>
+
+<div id="toasts"></div>
+
+<script>
+"use strict";
+const App = (() => {
+
+  const POLL_MS = 10000;   // each poll = one TL1 session to the switch; keep it gentle
+  const NUM_PORTS = 114;
+
+  // ---- Notifications ----
+  const Notify = (() => {
+    const box = document.getElementById('toasts');
+    function show(msg, level='info', ttl=4000){
+      const t = document.createElement('div');
+      t.className = `toast ${level}`; t.textContent = msg;
+      box.appendChild(t);
+      setTimeout(() => t.remove(), ttl);
+    }
+    return { show };
+  })();
+
+  // ---- API ----
+  const Api = {
+    async get(path){
+      const r = await fetch(path);
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(data.message || `HTTP ${r.status}`);
+      return data;
+    },
+    async post(path, body){
+      const r = await fetch(path, {method:'POST', headers:{'Content-Type':'application/json'},
+                                   body:JSON.stringify(body)});
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(data.message || `HTTP ${r.status}`);
+      return data;
+    },
+    async del(path){
+      const r = await fetch(path, {method:'DELETE'});
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(data.message || `HTTP ${r.status}`);
+      return data;
+    },
+  };
+
+  // ---- Router ----
+  const Router = (() => {
+    function show(view){
+      document.querySelectorAll('section').forEach(s =>
+        s.classList.toggle('active', s.id === `view-${view}`));
+      document.querySelectorAll('nav button').forEach(b =>
+        b.classList.toggle('active', b.dataset.view === view));
+      if(view === 'power') Power.refresh();
+    }
+    document.querySelectorAll('nav button').forEach(b =>
+      b.addEventListener('click', () => show(b.dataset.view)));
+    return { show };
+  })();
+
+  // ---- formatting ----
+  function formatCountdown(s){
+    if(s <= 0) return 'EXPIRED';
+    if(s >= 3600){
+      const h = Math.floor(s/3600), m = Math.floor((s%3600)/60);
+      return `${h}h ${String(m).padStart(2,'0')}m`;
+    }
+    const m = Math.floor(s/60), sec = s%60;
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+  function countdownClass(s){
+    if(s <= 0) return 'expired';
+    if(s <= 300) return 'expiring';
+    return '';
+  }
+  function powerClass(dbm){
+    if(dbm === null || dbm === undefined) return 'dbm-grey';
+    if(dbm > -10) return 'dbm-green';
+    if(dbm >= -30) return 'dbm-yellow';
+    return 'dbm-red';
+  }
+
+  // ---- shared state ----
+  let lastPatches = [];          // last /api/ports patches
+  let lastOk = null;             // Date of last successful poll
+
+  // ---- TimerManager: local 1s decrement between polls ----
+  const Timers = (() => {
+    const map = {};   // patch_id -> remaining seconds
+    function sync(patches){
+      const ids = new Set(patches.map(p => p.patch_id));
+      Object.keys(map).forEach(id => { if(!ids.has(id)) delete map[id]; });
+      patches.forEach(p => { if(p.remaining_seconds != null) map[p.patch_id] = p.remaining_seconds; });
+    }
+    function tick(){
+      let expired = false;
+      Object.keys(map).forEach(id => {
+        map[id] -= 1;
+        if(map[id] === 0) expired = true;   // crossed zero this tick
+        renderCountdown(id, map[id]);
+      });
+      if(expired) Dashboard.refresh();      // immediate resync on expiry
+    }
+    function get(id){ return map[id]; }
+    setInterval(tick, 1000);
+    return { sync, get };
+  })();
+
+  function renderCountdown(id, s){
+    document.querySelectorAll(`[data-cd="${id}"]`).forEach(el => {
+      el.textContent = formatCountdown(s);
+      el.className = 'countdown ' + countdownClass(s);
+    });
+  }
+
+  // ---- Dashboard ----
+  const Dashboard = (() => {
+    const grid = document.getElementById('portGrid');
+    const rows = document.getElementById('patchRows');
+    const banner = document.getElementById('banner');
+    const conn = document.getElementById('conn');
+
+    function renderGrid(ports){
+      grid.innerHTML = '';
+      ports.forEach(p => {
+        const c = document.createElement('div');
+        c.className = `cell ${p.status}`;
+        c.innerHTML = `${p.port}<small>${p.status}</small>`;
+        grid.appendChild(c);
+      });
+    }
+    function renderTable(patches){
+      rows.innerHTML = '';
+      if(!patches.length){
+        rows.innerHTML = `<tr><td colspan="4" class="muted">No active patches.</td></tr>`;
+        return;
+      }
+      patches.forEach(p => {
+        const tr = document.createElement('tr');
+        const rem = p.remaining_seconds;
+        tr.innerHTML = `<td>${p.patch_id}</td>
+          <td>${p.port_a} ↔ ${p.port_b}</td>
+          <td>${p.label ? escapeHtml(p.label) : '<span class="muted">—</span>'}</td>
+          <td><span class="countdown ${countdownClass(rem ?? 0)}" data-cd="${p.patch_id}">${
+            rem == null ? '<span class="muted">no timer</span>' : formatCountdown(rem)
+          }</span></td>`;
+        rows.appendChild(tr);
+      });
+    }
+    function setConn(ok){
+      if(ok){
+        conn.innerHTML = `<span class="ok">●</span> connected`;
+        banner.classList.remove('show');
+      } else {
+        conn.innerHTML = `<span class="bad">●</span> disconnected`;
+        const t = lastOk ? lastOk.toLocaleTimeString() : 'never';
+        banner.textContent = `⚠ Data may be stale — last updated ${t}`;
+        banner.classList.add('show');
+      }
+    }
+    async function refresh(){
+      try{
+        const data = await Api.get('/api/ports');
+        renderGrid(data.ports);
+        renderTable(data.patches);
+        Timers.sync(data.patches);
+        lastPatches = data.patches;
+        lastOk = new Date();
+        setConn(true);
+        Remove.render(data.patches);   // keep remove view in sync
+      } catch(e){
+        setConn(false);
+        Notify.show(`Refresh failed: ${e.message}`, 'error');
+      }
+    }
+    return { refresh };
+  })();
+
+  // ---- Create ----
+  const Create = (() => {
+    const form = document.getElementById('createForm');
+    function setErr(name, msg){
+      const el = form.querySelector(`.err[data-for="${name}"]`);
+      if(el) el.textContent = msg || '';
+    }
+    function validate(v){
+      let ok = true;
+      ['port_a','port_b','duration_minutes','label'].forEach(n => setErr(n,''));
+      if(!(v.port_a >= 1 && v.port_a <= 114)){ setErr('port_a','must be 1–114'); ok=false; }
+      if(!(v.port_b >= 1 && v.port_b <= 114)){ setErr('port_b','must be 1–114'); ok=false; }
+      if(ok && v.port_a === v.port_b){ setErr('port_b','must differ from Port A'); ok=false; }
+      if(!(v.duration_minutes >= 1 && v.duration_minutes <= 10080)){
+        setErr('duration_minutes','must be 1–10080'); ok=false; }
+      if(v.label.length > 64){ setErr('label','max 64 characters'); ok=false; }
+      return ok;
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const v = {
+        port_a: parseInt(fd.get('port_a'),10),
+        port_b: parseInt(fd.get('port_b'),10),
+        duration_minutes: parseInt(fd.get('duration_minutes'),10),
+        label: (fd.get('label')||'').trim(),
+      };
+      if(!validate(v)) return;
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      try{
+        const p = await Api.post('/api/patches', v);
+        Notify.show(`Patch ${p.patch_id} created`, 'success');
+        form.reset();
+        form.querySelector('[name=duration_minutes]').value = 60;
+        Dashboard.refresh();
+        Router.show('dashboard');
+      } catch(err){
+        Notify.show(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  })();
+
+  // ---- Remove ----
+  const Remove = (() => {
+    const rows = document.getElementById('removeRows');
+    function render(patches){
+      rows.innerHTML = '';
+      if(!patches.length){
+        rows.innerHTML = `<tr><td colspan="5" class="muted">No active patches.</td></tr>`;
+        return;
+      }
+      patches.forEach(p => {
+        const rem = p.remaining_seconds;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${p.patch_id}</td>
+          <td>${p.port_a} ↔ ${p.port_b}</td>
+          <td>${p.label ? escapeHtml(p.label) : '<span class="muted">—</span>'}</td>
+          <td><span class="countdown ${countdownClass(rem ?? 0)}" data-cd="${p.patch_id}">${
+            rem == null ? '<span class="muted">no timer</span>' : formatCountdown(rem)}</span></td>
+          <td><button class="danger" data-id="${p.patch_id}">Remove</button></td>`;
+        rows.appendChild(tr);
+      });
+      rows.querySelectorAll('button.danger').forEach(b =>
+        b.addEventListener('click', () => confirmRemove(b.dataset.id)));
+    }
+    async function confirmRemove(id){
+      if(!confirm(`Remove patch ${id}? This breaks the cross-connect on the switch.`)) return;
+      try{
+        await Api.del(`/api/patches/${id}`);
+        Notify.show(`Patch ${id} removed`, 'success');
+        Dashboard.refresh();
+      } catch(err){
+        Notify.show(err.message, 'error');
+      }
+    }
+    return { render };
+  })();
+
+  // ---- Power ----
+  const Power = (() => {
+    const grid = document.getElementById('powerGrid');
+    document.getElementById('refreshPower').addEventListener('click', () => refresh());
+    async function refresh(){
+      try{
+        const data = await Api.get('/api/power');
+        grid.innerHTML = '';
+        data.readings.forEach(r => {
+          const c = document.createElement('div');
+          c.className = `cell ${powerClass(r.dbm)}`;
+          c.innerHTML = `${r.port}<small>${r.dbm == null ? '—' : r.dbm}</small>`;
+          grid.appendChild(c);
+        });
+      } catch(e){
+        Notify.show(`Power read failed: ${e.message}`, 'error');
+      }
+    }
+    return { refresh };
+  })();
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ---- boot ----
+  Dashboard.refresh();
+  setInterval(() => Dashboard.refresh(), POLL_MS);
+
+  return { Dashboard, Router };
+})();
+</script>
+</body>
+</html>
