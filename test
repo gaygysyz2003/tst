@@ -1,231 +1,344 @@
-IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwoiIiIKdDVfcHJvdmlzaW9uLnB5ICAtLSAgUHJvdmlzaW9u
-IENpc2NvIDQwMEctWFAtTEMgKFQ1KSBvdmVyIFRMMS4KClNBTkRCT1ggRURJVElPTjogcnVuIHRo
-aXMgRElSRUNUTFkgT04gdGhlIGxhYiBib3ggKDEwLjI1Mi4yNTQuMjA3KSwgd2hpY2gKYWxyZWFk
-eSByZWFjaGVzIHRoZSBORXMuIEl0IGNvbm5lY3RzIHN0cmFpZ2h0IHRvIDxORT46MzA4MiBvdmVy
-IGEgcmF3IHNvY2tldCAtLQpubyBTU0gsIG5vIHBhcmFtaWtvLCBzdGRsaWIgb25seSAoUHl0aG9u
-IDMuNispLgoKUGVyLW5vZGUgZmxvdyAoaWRlbXBvdGVudCAtLSBleGlzdGluZyBpdGVtcyBhcmUg
-ZGV0ZWN0ZWQgdmlhIFJUUlYgYW5kIHNraXBwZWQpOgogIGxvZ2luIC0+IGVxdWlwIGNhcmQgLT4g
-ZXF1aXAgUFBNcyAtPiBvcG1vZGUgLT4gdHJ1bmsgZnJlcSArIElTCiAgLT4gY2xpZW50IHByb3Zp
-c2lvbiArIElTIC0+IGxvZ291dC4gIEFueSBub24tdG9sZXJhdGVkIERFTlkgYWJvcnRzIHRoZSBy
-dW4uCgpDcmVkZW50aWFscyBjb21lIGZyb20gZW52IHZhcnMgKGZhbGxiYWNrIHRvIHRoZSBsYWIg
-ZGVmYXVsdHMgYmVsb3cpOgogIFRMMV9VSUQgIChkZWZhdWx0IENJU0NPMTUpCiAgVEwxX1BJRCAg
-KGRlZmF1bHQgb3RidSsxKQoKVXNhZ2U6CiAgcHl0aG9uMyB0NV9wcm92aXNpb24ucHkgLS1kcnkt
-cnVuIC0tb25seSBORS03NyAgICAgICAgICAgICMgcHJldmlldywgbm8gY29ubmVjdAogIHB5dGhv
-bjMgdDVfcHJvdmlzaW9uLnB5IC0tb25seSBORS03NyAtLXBvd2VyLXVwLW9ubHkgICAgICAjIHNh
-ZmU6IG9ubHkgZnJlcStJUwogIHB5dGhvbjMgdDVfcHJvdmlzaW9uLnB5IC0tb25seSBORS03NyAg
-ICAgICAgICAgICAgICAgICAgICAjIGZ1bGwgaWRlbXBvdGVudAogIHB5dGhvbjMgdDVfcHJvdmlz
-aW9uLnB5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIGFsbCBub2RlcwoiIiIK
-CmZyb20gX19mdXR1cmVfXyBpbXBvcnQgYW5ub3RhdGlvbnMKCmltcG9ydCBhcmdwYXJzZQppbXBv
-cnQgaXRlcnRvb2xzCmltcG9ydCBvcwppbXBvcnQgcmUKaW1wb3J0IHNvY2tldAppbXBvcnQgc3lz
-CmltcG9ydCB0aW1lCmZyb20gZGF0YWNsYXNzZXMgaW1wb3J0IGRhdGFjbGFzcwoKCiMgPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09CiMgQ09ORklHCiMgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CgpAZGF0YWNsYXNzCmNs
-YXNzIE5vZGU6CiAgICBpcDogc3RyCiAgICB0bDFfcG9ydDogaW50ID0gMzA4MgogICAgIyBBSUQg
-Z3JhbW1hciBjb25maXJtZWQgb24gTkUtNzc6IDxzaGVsZj4tPHNsb3Q+LTxwb3J0PlstPHN1Yj5d
-CiAgICBzaGVsZjogaW50ID0gMiAgICAgICAgICAjIDQwMEctWFAtTEMgaXMgaW4gU0hFTEYgMgog
-ICAgc2xvdDogaW50ID0gNiAgICAgICAgICAgIyAuLi4gU0xPVCA2ICAoU0xPVC0yLTYpCiAgICB0
-cnVua19wb3J0OiBpbnQgPSAxMSAgICAjIHRydW5rIHBvcnQgMTEgLT4gcG93ZXIgdXAKICAgIGNs
-aWVudF9wb3J0OiBpbnQgPSA3ICAgICMgY2xpZW50IHBvcnQgNyAtPiBwb3dlciB1cAogICAgZnJl
-cV9ubTogc3RyID0gIjE1MzAuMzMiCiAgICAjIFBQTXMgdG8gcHJvdmlzaW9uIG9uIGEgYmxhbmsg
-Y2FyZC4gU2NvcGVkIHRvIHRoZSBwb3J0cyBpbiB1c2U7IG9uIE5FLTc3CiAgICAjIHRoZXNlIGFs
-cmVhZHkgZXhpc3Qgc28gdGhleSBnZXQgc2tpcHBlZC4gRm9yIGEgYmxhbmsgY2FyZCwgbGlzdCBl
-dmVyeQogICAgIyBjbGllbnQvdHJ1bmsgcG9ydCB0aGUgb3Btb2RlIHJlZmVyZW5jZXMgQU5EIGVu
-c3VyZSB0aGUgcGx1Z2dhYmxlIGlzCiAgICAjIHBoeXNpY2FsbHkgcHJlc2VudCwgZWxzZSBFTlQt
-RVFQVCB3aWxsIERFTlkuICAjIENPTkZJUk0KICAgIGNsaWVudF9wcG1zOiB0dXBsZSA9ICg3LCkK
-ICAgIHRydW5rX3BwbXM6IHR1cGxlID0gKDExLCkKICAgICMgUHJvdmVuLXZhbGlkIG9wZXJhdGlu
-Zy1tb2RlIHN0cmluZyByZWFkIGJhY2sgZnJvbSBORS03NyAoUlRSVi1PUE1PREUpLgogICAgb3Bt
-b2RlOiBzdHIgPSAoIk9QTU9ERT1NWFAsVFJVTktPUE1PREU9MTEvTS0yMDBHJjEyL00tMjAwRywi
-CiAgICAgICAgICAgICAgICAgICAiQ0xJRU5UU0VUUz0xMS9TMS9PUE0tMTAwRyYxMS9TMi9PUE0t
-MTAwRyYiCiAgICAgICAgICAgICAgICAgICAiMTIvUzMvT1BNLTEwMEcmMTIvUzQvT1BNLTEwMEci
-KQogICAgbmFtZTogc3RyID0gIiIKCgpOT0RFUyA9IFsKICAgICMgTkUtNzcgY29uZmlybWVkOiA0
-MDBHLVhQLUxDIGF0IFNMT1QtMi02LCB0cnVuayBWRkFDLTItNi0xMS0xIChJUy1OUiwKICAgICMg
-RlJFUT0xNTMwLjMzKSwgY2xpZW50IEFHR1ItMi02LTctMS4KICAgIE5vZGUoaXA9IjEwLjI1Mi4y
-NTQuNzciLCBzaGVsZj0yLCBzbG90PTYsIG5hbWU9Ik5FLTc3IiksCiAgICAjIE5FLTc0OiBjYXJk
-IGxvY2F0aW9uIE5PVCB5ZXQgY29uZmlybWVkIC0tIHJ1biBSVFJWLUVRUFQ6OkFMTCB0aGVyZSBh
-bmQKICAgICMgdXBkYXRlIHNoZWxmL3Nsb3QgYmVmb3JlIGEgbGl2ZSBydW4uICAjIENPTkZJUk0K
-ICAgIE5vZGUoaXA9IjEwLjI1Mi4yNTQuNzQiLCBzaGVsZj0yLCBzbG90PTYsIG5hbWU9Ik5FLTc0
-IiksCl0KCgojID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PQojIFRMMSBzZXNzaW9uIChyYXcgc29ja2V0KQoj
-ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQoKY2xhc3MgVGwxRXJyb3IoRXhjZXB0aW9uKToKICAgIHBhc3MK
-CgpAZGF0YWNsYXNzCmNsYXNzIFRsMVJlc3BvbnNlOgogICAgY3RhZzogc3RyCiAgICBjb21wbGV0
-aW9uOiBzdHIgICAgICAgICAgIyBDT01QTEQgfCBERU5ZIHwgUFJUTCB8IFJUUlYgfCAiIgogICAg
-ZXJyb3JfY29kZTogc3RyID0gIiIKICAgIHJhdzogc3RyID0gIiIKCiAgICBAcHJvcGVydHkKICAg
-IGRlZiBvayhzZWxmKSAtPiBib29sOgogICAgICAgIHJldHVybiBzZWxmLmNvbXBsZXRpb24gaW4g
-KCJDT01QTEQiLCAiUFJUTCIpCgoKX0NPTVBMRVRJT05fUkUgPSByZS5jb21waWxlKHIiXk1ccyso
-XFMrKVxzKyhDT01QTER8REVOWXxQUlRMfFJUUlYpXGIiLCByZS5NVUxUSUxJTkUpCl9FUlJDT0RF
-X1JFID0gcmUuY29tcGlsZShyIl5ccysoW0EtWl17NH0pXGIiLCByZS5NVUxUSUxJTkUpCgoKY2xh
-c3MgVEwxU2Vzc2lvbjoKICAgIGRlZiBfX2luaXRfXyhzZWxmLCBzb2NrLCByZWFkX3RpbWVvdXQ9
-MzAuMCwgaWRsZV9nYXA9MC40LCBsb2dnZXI9Tm9uZSk6CiAgICAgICAgc2VsZi5fcyA9IHNvY2sK
-ICAgICAgICBzZWxmLnJlYWRfdGltZW91dCA9IHJlYWRfdGltZW91dAogICAgICAgIHNlbGYuaWRs
-ZV9nYXAgPSBpZGxlX2dhcAogICAgICAgIHNlbGYuX2xvZyA9IGxvZ2dlciBvciAobGFtYmRhICpf
-OiBOb25lKQogICAgICAgIHNlbGYuX2J1ZiA9ICIiCiAgICAgICAgc2VsZi5fcy5zZXR0aW1lb3V0
-KDAuNSkKCiAgICBkZWYgc2VuZChzZWxmLCBjb21tYW5kOiBzdHIpIC0+IE5vbmU6CiAgICAgICAg
-aWYgbm90IGNvbW1hbmQucnN0cmlwKCkuZW5kc3dpdGgoIjsiKToKICAgICAgICAgICAgY29tbWFu
-ZCA9IGNvbW1hbmQucnN0cmlwKCkgKyAiOyIKICAgICAgICBzZWxmLl9sb2coIj4+PiAiICsgY29t
-bWFuZCkKICAgICAgICBzZWxmLl9zLnNlbmRhbGwoKGNvbW1hbmQgKyAiXHJcbiIpLmVuY29kZSgi
-YXNjaWkiLCAicmVwbGFjZSIpKQoKICAgIGRlZiBfcmVjdihzZWxmKSAtPiBzdHI6CiAgICAgICAg
-dHJ5OgogICAgICAgICAgICBjaHVuayA9IHNlbGYuX3MucmVjdig4MTkyKQogICAgICAgIGV4Y2Vw
-dCBzb2NrZXQudGltZW91dDoKICAgICAgICAgICAgcmV0dXJuICIiCiAgICAgICAgZXhjZXB0IE9T
-RXJyb3I6CiAgICAgICAgICAgIHJldHVybiAiIgogICAgICAgIHJldHVybiBjaHVuay5kZWNvZGUo
-ImFzY2lpIiwgInJlcGxhY2UiKSBpZiBjaHVuayBlbHNlICIiCgogICAgZGVmIHJlYWRfcmVzcG9u
-c2Uoc2VsZiwgY3RhZzogc3RyKSAtPiBUbDFSZXNwb25zZToKICAgICAgICAiIiJSZWFkIHVudGls
-IHRoZSByZXNwb25zZSBibG9jayBmb3IgVEhJUyBjdGFnIHRlcm1pbmF0ZXMgd2l0aCAnOycuCgog
-ICAgICAgIE1hdGNoZXMgdGhlIGV4YWN0IGN0YWcgc28gdGhlIGFzeW5jIGFsYXJtL2V2ZW50IHN0
-b3JtIChBIC8gKiogLyAqQwogICAgICAgIG1lc3NhZ2VzLCBlLmcuIFNJR0xPU1MvU1FVRUxDSEVE
-IGFmdGVyIGJyaW5naW5nIGEgcG9ydCBJUykgaXMgc2tpcHBlZAogICAgICAgIHJhdGhlciB0aGFu
-IG1pc3Rha2VuIGZvciBvdXIgY29tcGxldGlvbi4KICAgICAgICAiIiIKICAgICAgICBjb21wX3Jl
-ID0gcmUuY29tcGlsZSgKICAgICAgICAgICAgciJeTVxzK3t9XHMrKENPTVBMRHxERU5ZfFBSVEx8
-UlRSVilcYiIuZm9ybWF0KHJlLmVzY2FwZShzdHIoY3RhZykpKSwKICAgICAgICAgICAgcmUuTVVM
-VElMSU5FKQogICAgICAgIGRlYWRsaW5lID0gdGltZS5tb25vdG9uaWMoKSArIHNlbGYucmVhZF90
-aW1lb3V0CiAgICAgICAgYmxvY2ssIHNlbGYuX2J1ZiA9IHNlbGYuX2J1ZiwgIiIKCiAgICAgICAg
-d2hpbGUgdGltZS5tb25vdG9uaWMoKSA8IGRlYWRsaW5lOgogICAgICAgICAgICBkYXRhID0gc2Vs
-Zi5fcmVjdigpCiAgICAgICAgICAgIGlmIGRhdGE6CiAgICAgICAgICAgICAgICBibG9jayArPSBk
-YXRhCiAgICAgICAgICAgICAgICBpZiAiOyIgaW4gYmxvY2sgYW5kIGNvbXBfcmUuc2VhcmNoKGJs
-b2NrKToKICAgICAgICAgICAgICAgICAgICB0aW1lLnNsZWVwKHNlbGYuaWRsZV9nYXApCiAgICAg
-ICAgICAgICAgICAgICAgYmxvY2sgKz0gc2VsZi5fcmVjdigpCiAgICAgICAgICAgICAgICAgICAg
-cmV0dXJuIHNlbGYuX3BhcnNlKGJsb2NrLCBjdGFnLCBjb21wX3JlKQogICAgICAgICAgICBlbHNl
-OgogICAgICAgICAgICAgICAgaWYgYmxvY2sgYW5kICI7IiBpbiBibG9jayBhbmQgY29tcF9yZS5z
-ZWFyY2goYmxvY2spOgogICAgICAgICAgICAgICAgICAgIHJldHVybiBzZWxmLl9wYXJzZShibG9j
-aywgY3RhZywgY29tcF9yZSkKICAgICAgICAgICAgICAgIHRpbWUuc2xlZXAoMC4wNSkKCiAgICAg
-ICAgcmFpc2UgVGwxRXJyb3IoInRpbWVvdXQgd2FpdGluZyBmb3IgY3RhZz17fVxue30iLmZvcm1h
-dChjdGFnLCBibG9jaykpCgogICAgZGVmIF9wYXJzZShzZWxmLCBibG9jazogc3RyLCBjdGFnOiBz
-dHIsIGNvbXBfcmUpIC0+IFRsMVJlc3BvbnNlOgogICAgICAgIHNlbGYuX2xvZyhibG9jay5zdHJp
-cCgpKQogICAgICAgIG0gPSBjb21wX3JlLnNlYXJjaChibG9jaykgb3IgX0NPTVBMRVRJT05fUkUu
-c2VhcmNoKGJsb2NrKQogICAgICAgIGlmIG5vdCBtOgogICAgICAgICAgICByZXR1cm4gVGwxUmVz
-cG9uc2UoY3RhZz1jdGFnLCBjb21wbGV0aW9uPSIiLCByYXc9YmxvY2spCiAgICAgICAgY29tcGxl
-dGlvbiA9IG0uZ3JvdXAobS5sYXN0aW5kZXgpCiAgICAgICAgZXJyID0gIiIKICAgICAgICBpZiBj
-b21wbGV0aW9uID09ICJERU5ZIjoKICAgICAgICAgICAgZW0gPSBfRVJSQ09ERV9SRS5zZWFyY2go
-YmxvY2tbbS5lbmQoKTpdKQogICAgICAgICAgICBlcnIgPSBlbS5ncm91cCgxKSBpZiBlbSBlbHNl
-ICIiCiAgICAgICAgcmV0dXJuIFRsMVJlc3BvbnNlKGN0YWc9Y3RhZywgY29tcGxldGlvbj1jb21w
-bGV0aW9uLAogICAgICAgICAgICAgICAgICAgICAgICAgICBlcnJvcl9jb2RlPWVyciwgcmF3PWJs
-b2NrKQoKCiMgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09CiMgQ29tbWFuZCBidWlsZGVyCiMgPT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09CgpAZGF0YWNsYXNzCmNsYXNzIFN0ZXA6CiAgICBkZXNjOiBzdHIKICAgIGFjdGlv
-bjogc3RyICAgICAgICAgICMgRU5UL0VEIGNvbW1hbmQsICd7Y30nIG1hcmtzIHRoZSBjdGFnIHNs
-b3QKICAgIGNoZWNrOiBzdHIgPSAiIiAgICAgICMgb3B0aW9uYWwgUlRSVjsgQ09NUExEID0+IGVu
-dGl0eSBleGlzdHMgPT4gc2tpcCBhY3Rpb24KICAgIHRvbGVyYXRlOiB0dXBsZSA9ICgpICMgREVO
-WSBjb2RlcyB0cmVhdGVkIGFzIHN1Y2Nlc3MgKGUuZy4gU0FJTiBhbHJlYWR5LUlTKQogICAgY29u
-ZmlnOiBib29sID0gRmFsc2UgIyBhIGNvbmZpZyBjaGFuZ2UgKG5vdCBhIGNyZWF0ZSBvciBhIHBv
-d2VyLXVwKTsKICAgICAgICAgICAgICAgICAgICAgICAgICMgZXhjbHVkZWQgZnJvbSAtLXBvd2Vy
-LXVwLW9ubHkgcnVucwoKCmRlZiBidWlsZF9zZXF1ZW5jZShub2RlOiBOb2RlLCB1aWQ6IHN0ciwg
-cGlkOiBzdHIpOgogICAgcywgc2wgPSBub2RlLnNoZWxmLCBub2RlLnNsb3QKICAgIGNhcmQgPSAi
-U0xPVC17fS17fSIuZm9ybWF0KHMsIHNsKQogICAgIyBDT05GSVJNRUQgb24gTkUtNzc6IHRydW5r
-IFZGQUMtMi02LTExLTEsIGNsaWVudCBBR0dSLTItNi03LTEKICAgIHRydW5rX2FpZCA9ICJWRkFD
-LXt9LXt9LXt9LTEiLmZvcm1hdChzLCBzbCwgbm9kZS50cnVua19wb3J0KQogICAgY2xpZW50X2Fp
-ZCA9ICJBR0dSLXt9LXt9LXt9LTEiLmZvcm1hdChzLCBzbCwgbm9kZS5jbGllbnRfcG9ydCkKCiAg
-ICBzdGVwcyA9IFtTdGVwKCJsb2dpbiIsICJBQ1QtVVNFUjo6e306e3tjfX06Ont9Ii5mb3JtYXQo
-dWlkLCBwaWQpKV0KCiAgICBzdGVwcy5hcHBlbmQoU3RlcCgiZXF1aXAgY2FyZCA0MDBHLVhQLUxD
-IiwKICAgICAgICAgICAgICAgICAgICAgICJFTlQtRVFQVDo6e306e3tjfX06OjQwMEctWFAtTEMi
-LmZvcm1hdChjYXJkKSwKICAgICAgICAgICAgICAgICAgICAgIGNoZWNrPSJSVFJWLUVRUFQ6Ont9
-Ont7Y319Ii5mb3JtYXQoY2FyZCkpKQogICAgZm9yIHAgaW4gbm9kZS5jbGllbnRfcHBtczoKICAg
-ICAgICBhaWQgPSAiQVBQTS17fS17fS17fSIuZm9ybWF0KHMsIHNsLCBwKQogICAgICAgIHN0ZXBz
-LmFwcGVuZChTdGVwKCJlcXVpcCBjbGllbnQgUFBNIHBvcnQge30iLmZvcm1hdChwKSwKICAgICAg
-ICAgICAgICAgICAgICAgICAgICAiRU5ULUVRUFQ6Ont9Ont7Y319OjpQUE0tMSIuZm9ybWF0KGFp
-ZCksCiAgICAgICAgICAgICAgICAgICAgICAgICAgY2hlY2s9IlJUUlYtRVFQVDo6e306e3tjfX0i
-LmZvcm1hdChhaWQpKSkKICAgIGZvciBwIGluIG5vZGUudHJ1bmtfcHBtczoKICAgICAgICBhaWQg
-PSAiUFBNLXt9LXt9LXt9Ii5mb3JtYXQocywgc2wsIHApCiAgICAgICAgc3RlcHMuYXBwZW5kKFN0
-ZXAoImVxdWlwIHRydW5rIFBQTSBwb3J0IHt9Ii5mb3JtYXQocCksCiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIkVOVC1FUVBUOjp7fTp7e2N9fTo6UFBNLTEiLmZvcm1hdChhaWQpLAogICAgICAg
-ICAgICAgICAgICAgICAgICAgIGNoZWNrPSJSVFJWLUVRUFQ6Ont9Ont7Y319Ii5mb3JtYXQoYWlk
-KSkpCgogICAgc3RlcHMuYXBwZW5kKFN0ZXAoInNldCBvcGVyYXRpbmcgbW9kZSAoTVhQKSIsCiAg
-ICAgICAgICAgICAgICAgICAgICAiRU5ULU9QTU9ERTo6e306e3tjfX06Ojp7fSIuZm9ybWF0KGNh
-cmQsIG5vZGUub3Btb2RlKSwKICAgICAgICAgICAgICAgICAgICAgIGNoZWNrPSJSVFJWLU9QTU9E
-RTo6e306e3tjfX0iLmZvcm1hdChjYXJkKSkpCgogICAgIyBGcmVxdWVuY3kgaXMgYSBjb25maWcg
-Y2hhbmdlOiBvbmx5IG1lYW5pbmdmdWwgd2hpbGUgdGhlIHRydW5rIGlzIE9PUwogICAgIyAoYmxh
-bmsgY2FyZCkuIE9uIGFuIGFscmVhZHktSVMvY29ubmVjdGVkIHBvcnQgdGhlIE5FIHJldHVybnMg
-U1JPRgogICAgIyAoImNhbm5vdCBjaGFuZ2UgY29uZmlnIHdpdGggcG9ydCBoYXZpbmcgY29ubmVj
-dGlvbiIpIC0tIHRvbGVyYXRlZCwgc2luY2UKICAgICMgdGhlIGZyZXEgaXMgYWxyZWFkeSB3aGF0
-IHdlIHdhbnQuIEV4Y2x1ZGVkIGVudGlyZWx5IGZyb20gLS1wb3dlci11cC1vbmx5LgogICAgc3Rl
-cHMuYXBwZW5kKFN0ZXAoInNldCB0cnVuayB3YXZlbGVuZ3RoIiwKICAgICAgICAgICAgICAgICAg
-ICAgICJFRC1PVFU0QzI6Ont9Ont7Y319Ojo6RlJFUT17fSIuZm9ybWF0KHRydW5rX2FpZCwgbm9k
-ZS5mcmVxX25tKSwKICAgICAgICAgICAgICAgICAgICAgIHRvbGVyYXRlPSgiU1JPRiIsKSwgY29u
-ZmlnPVRydWUpKQogICAgc3RlcHMuYXBwZW5kKFN0ZXAoInRydW5rIHBvcnQgSVMgKHBvd2VyIHVw
-KSIsCiAgICAgICAgICAgICAgICAgICAgICAiRUQtT1RVNEMyOjp7fTp7e2N9fTo6OjpJUyIuZm9y
-bWF0KHRydW5rX2FpZCksCiAgICAgICAgICAgICAgICAgICAgICB0b2xlcmF0ZT0oIlNBSU4iLCkp
-KQoKICAgIHN0ZXBzLmFwcGVuZChTdGVwKCJwcm92aXNpb24gY2xpZW50IDEwMEdJR0UiLAogICAg
-ICAgICAgICAgICAgICAgICAgIkVOVC0xMDBHSUdFOjp7fTp7e2N9fTo6Ok5VTU9GTEFORVM9NCIu
-Zm9ybWF0KGNsaWVudF9haWQpLAogICAgICAgICAgICAgICAgICAgICAgY2hlY2s9IlJUUlYtMTAw
-R0lHRTo6e306e3tjfX0iLmZvcm1hdChjbGllbnRfYWlkKSkpCiAgICBzdGVwcy5hcHBlbmQoU3Rl
-cCgiY2xpZW50IHBvcnQgSVMgKHBvd2VyIHVwKSIsCiAgICAgICAgICAgICAgICAgICAgICAiRUQt
-MTAwR0lHRTo6e306e3tjfX06Ojo6SVMiLmZvcm1hdChjbGllbnRfYWlkKSwKICAgICAgICAgICAg
-ICAgICAgICAgIHRvbGVyYXRlPSgiU0FJTiIsKSkpCgogICAgc3RlcHMuYXBwZW5kKFN0ZXAoImxv
-Z291dCIsICJDQU5DLVVTRVI6Ont9Ont7Y319Ii5mb3JtYXQodWlkKSkpCiAgICByZXR1cm4gc3Rl
-cHMKCgojID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PQojIFJ1bm5lcgojID09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQoK
-X2N0YWcgPSBpdGVydG9vbHMuY291bnQoMSkKCgpkZWYgbmV4dF9jdGFnKCkgLT4gc3RyOgogICAg
-cmV0dXJuIHN0cihuZXh0KF9jdGFnKSkKCgpkZWYgbG9nKG1zZzogc3RyKSAtPiBOb25lOgogICAg
-cHJpbnQobXNnLCBmbHVzaD1UcnVlKQoKCmRlZiBwcm92aXNpb25fbm9kZShub2RlLCB1aWQsIHBp
-ZCwgZHJ5X3J1biwgcG93ZXJfdXBfb25seT1GYWxzZSkgLT4gYm9vbDoKICAgIGxhYmVsID0gbm9k
-ZS5uYW1lIG9yIG5vZGUuaXAKICAgIGxvZygiXG49PT0ge30gKHt9Ont9KXt9ID09PSIuZm9ybWF0
-KAogICAgICAgIGxhYmVsLCBub2RlLmlwLCBub2RlLnRsMV9wb3J0LAogICAgICAgICIgIFtQT1dF
-Ui1VUCBPTkxZXSIgaWYgcG93ZXJfdXBfb25seSBlbHNlICIiKSkKICAgIHN0ZXBzID0gYnVpbGRf
-c2VxdWVuY2Uobm9kZSwgdWlkLCBwaWQpCiAgICBpZiBwb3dlcl91cF9vbmx5OgogICAgICAgICMg
-a2VlcCBvbmx5IGxvZ2luLCB0aGUgSVMgcG93ZXItdXBzLCBhbmQgbG9nb3V0CiAgICAgICAgc3Rl
-cHMgPSBbc3QgZm9yIHN0IGluIHN0ZXBzIGlmIG5vdCBzdC5jaGVjayBhbmQgbm90IHN0LmNvbmZp
-Z10KCiAgICBpZiBkcnlfcnVuOgogICAgICAgIG4gPSBpdGVydG9vbHMuY291bnQoMSkKICAgICAg
-ICBmb3Igc3QgaW4gc3RlcHM6CiAgICAgICAgICAgIGlmIHN0LmNoZWNrOgogICAgICAgICAgICAg
-ICAgbG9nKCIgIFt7Oj4zfV0gezoyNn0gQ0hFQ0s6IHt9OyAgKHNraXAgaWYgQ09NUExEKSIuZm9y
-bWF0KAogICAgICAgICAgICAgICAgICAgIG5leHQobiksIHN0LmRlc2MsIHN0LmNoZWNrLnJlcGxh
-Y2UoIntjfSIsICJfIikpKQogICAgICAgICAgICBleHRyYSA9ICIgICB0b2xlcmF0ZT17fSIuZm9y
-bWF0KCIsIi5qb2luKHN0LnRvbGVyYXRlKSkgaWYgc3QudG9sZXJhdGUgZWxzZSAiIgogICAgICAg
-ICAgICBsb2coIiAgW3s6PjN9XSB7OjI2fSB7fTt7fSIuZm9ybWF0KAogICAgICAgICAgICAgICAg
-bmV4dChuKSwgc3QuZGVzYywgc3QuYWN0aW9uLnJlcGxhY2UoIntjfSIsICJfIiksIGV4dHJhKSkK
-ICAgICAgICByZXR1cm4gVHJ1ZQoKICAgIHNvY2sgPSBOb25lCiAgICB0cnk6CiAgICAgICAgbG9n
-KCIgIGNvbm5lY3Qge306e30iLmZvcm1hdChub2RlLmlwLCBub2RlLnRsMV9wb3J0KSkKICAgICAg
-ICBzb2NrID0gc29ja2V0LmNyZWF0ZV9jb25uZWN0aW9uKChub2RlLmlwLCBub2RlLnRsMV9wb3J0
-KSwgdGltZW91dD0yMCkKICAgICAgICBzZXNzID0gVEwxU2Vzc2lvbihzb2NrLCBsb2dnZXI9bGFt
-YmRhIG06IGxvZygiICAgICIgKyBtKSkKCiAgICAgICAgZm9yIHN0IGluIHN0ZXBzOgogICAgICAg
-ICAgICBsb2coIiAgLT4gIiArIHN0LmRlc2MpCiAgICAgICAgICAgIGlmIHN0LmNoZWNrOgogICAg
-ICAgICAgICAgICAgY3RhZyA9IG5leHRfY3RhZygpCiAgICAgICAgICAgICAgICBzZXNzLnNlbmQo
-c3QuY2hlY2sucmVwbGFjZSgie2N9IiwgY3RhZykpCiAgICAgICAgICAgICAgICBpZiBzZXNzLnJl
-YWRfcmVzcG9uc2UoY3RhZykub2s6CiAgICAgICAgICAgICAgICAgICAgbG9nKCIgICAgIGFscmVh
-ZHkgcHJlc2VudCAtPiBza2lwIikKICAgICAgICAgICAgICAgICAgICBjb250aW51ZQogICAgICAg
-ICAgICBjdGFnID0gbmV4dF9jdGFnKCkKICAgICAgICAgICAgc2Vzcy5zZW5kKHN0LmFjdGlvbi5y
-ZXBsYWNlKCJ7Y30iLCBjdGFnKSkKICAgICAgICAgICAgcmVzcCA9IHNlc3MucmVhZF9yZXNwb25z
-ZShjdGFnKQogICAgICAgICAgICBpZiBub3QgcmVzcC5vazoKICAgICAgICAgICAgICAgIGlmIHJl
-c3AuZXJyb3JfY29kZSBpbiBzdC50b2xlcmF0ZToKICAgICAgICAgICAgICAgICAgICBsb2coIiAg
-ICAgdG9sZXJhdGVkICh7fSkiLmZvcm1hdChyZXNwLmVycm9yX2NvZGUpKQogICAgICAgICAgICAg
-ICAgICAgIGNvbnRpbnVlCiAgICAgICAgICAgICAgICByYWlzZSBUbDFFcnJvcigiREVOSUVEOiB7
-fSAoY29kZT17fSlcbiAgICAgICByZXNwOiB7fSIuZm9ybWF0KAogICAgICAgICAgICAgICAgICAg
-IHN0LmRlc2MsIHJlc3AuZXJyb3JfY29kZSBvciAiPyIsIHJlc3AucmF3LnN0cmlwKCkpKQogICAg
-ICAgICAgICBsb2coIiAgICAgT0sgKENPTVBMRCkiKQogICAgICAgIGxvZygiICA9PT0ge306IENP
-TVBMRVRFID09PSIuZm9ybWF0KGxhYmVsKSkKICAgICAgICByZXR1cm4gVHJ1ZQoKICAgIGV4Y2Vw
-dCBUbDFFcnJvciBhcyBlOgogICAgICAgIGxvZygiICAhISB7fTogVEwxIGZhaWx1cmUgLT4ge30i
-LmZvcm1hdChsYWJlbCwgZSkpCiAgICAgICAgcmV0dXJuIEZhbHNlCiAgICBleGNlcHQgT1NFcnJv
-ciBhcyBlOgogICAgICAgIGxvZygiICAhISB7fTogY29ubmVjdGlvbiBlcnJvciAtPiB7fSIuZm9y
-bWF0KGxhYmVsLCBlKSkKICAgICAgICByZXR1cm4gRmFsc2UKICAgIGZpbmFsbHk6CiAgICAgICAg
-aWYgc29jazoKICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgc29jay5jbG9zZSgpCiAg
-ICAgICAgICAgIGV4Y2VwdCBPU0Vycm9yOgogICAgICAgICAgICAgICAgcGFzcwogICAgICAgIGxv
-ZygiICBkaXNjb25uZWN0ZWQgZnJvbSB7fSIuZm9ybWF0KGxhYmVsKSkKCgpkZWYgbWFpbigpIC0+
-IGludDoKICAgIGFwID0gYXJncGFyc2UuQXJndW1lbnRQYXJzZXIoZGVzY3JpcHРpb249IlByb3Zp
-c2lvbiA0MDBHLVhQLUxDIG92ZXIgVEwxIChzYW5kYm94IGVkaXRpb24pLiIpCiAgICBhcC5hZGRf
-YXJndW1lbnQoIi0tZHJ5LXJ1biIsIGFjdGlvbj0ic3RvcmVfdHJ1ZSIsCiAgICAgICAgICAgICAg
-ICAgICAgaGVscD0icHJpbnQgdGhlIFRMMSBjb21tYW5kcyB3aXRob3V0IGNvbm5lY3RpbmciKQog
-ICAgYXAuYWRkX2FyZ3VtZW50KCItLW9ubHkiLCBoZWxwPSJydW4gb25seSB0aGUgbm9kZSB3aG9z
-ZSBpcC9uYW1lIG1hdGNoZXMgdGhpcyIpCiAgICBhcC5hZGRfYXJndW1lbnQoIi0tcG93ZXItdXАt
-b25seSIsIGFjdGlvbj0ic3RvcmVfdHJ1ZSIsCiAgICAgICAgICAgICAgICAgICAgaGVscD0ic2tp
-cCBhbGwgRU5UIChjcmVhdGUpIHN0ZXBzOyBvbmx5IHNldCBmcmVxICsgYnJpbmcgSVMiKQogICAg
-YXJncyA9IGFwLnBhcnNlX2FyZ3MoKQoKICAgIHVpZCA9IG9zLmVudmlyb24uZ2V0KCJUTDFfVUlE
-IiwgIkNJU0NPMTUiKQogICAgcGlkID0gb3MuZW52aXJvbi5nZXQoIlRMMV9QSUQiLCAib3RidSsx
-IikKCiAgICBub2RlcyA9IE5PREVTCiAgICBpZiBhcmdzLm9ubHk6CiAgICAgICAgbm9kZXMgPSBb
-biBmb3IgbiBpbiBOT0RFUyBpZiBhcmdzLm9ubHkgaW4gKG4uaXAsIG4ubmFtZSldCiAgICAgICAg
-aWYgbm90IG5vZGVzOgogICAgICAgICAgICBzeXMuZXhpdCgibm8gbm9kZSBtYXRjaGVzIC0tb25s
-eSB7IXJ9Ii5mb3JtYXQoYXJncy5vbmx5KSkKCiAgICByZXN1bHRzID0ge30KICAgIGFib3J0ZWQg
-PSBGYWxzZQogICAgZm9yIG5vZGUgaW4gbm9kZXM6CiAgICAgICAgbmFtZSA9IG5vZGUubmFtZSBv
-ciBub2RlLmlwCiAgICAgICAgaWYgYWJvcnRlZDoKICAgICAgICAgICAgcmVzdWx0c1tuYW1lXSA9
-IE5vbmUKICAgICAgICAgICAgY29udGludWUKICAgICAgICBvayA9IHByb3Zpc2lvbl9ub2RlKG5v
-ZGUsIHVpZCwgcGlkLCBhcmdzLmRyeV9ydW4sCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBw
-b3dlcl91cF9vbmx5PWFyZ3MucG93ZXJfdXBfb25seSkKICAgICAgICByZXN1bHRzW25hbWVdID0g
-b2sKICAgICAgICBpZiBub3Qgb2sgYW5kIG5vdCBhcmdzLmRyeV9ydW46CiAgICAgICAgICAgIGxv
-ZygiXG4hISBBQk9SVElORyBSVU46IHt9IGZhaWxlZDsgc2tpcHBpbmcgcmVtYWluaW5nIG5vZGUo
-cykuIi5mb3JtYXQobmFtZSkpCiAgICAgICAgICAgIGFib3J0ZWQgPSBUcnVlCgogICAgbG9nKCJc
-bj09PSBTVU1NQVJZID09PSIpCiAgICBmb3IgbmFtZSwgb2sgaW4gcmVzdWx0cy5pdGVtcygpOgog
-ICAgICAgIHN0YXR1cyA9ICJPSyIgaWYgb2sgZWxzZSAoIlNLSVBQRUQiIGlmIG9rIGlzIE5vbmUg
-ZWxzZSAiRkFJTEVEIikKICAgICAgICBsb2coIiAge306IHt9Ii5mb3JtYXQobmFtZSwgc3RhdHVz
-KSkKICAgIHJldHVybiAwIGlmIGFsbCh2IGZvciB2IGluIHJlc3VsdHMudmFsdWVzKCkpIGVsc2Ug
-MQoKCmlmIF9fbmFtZV9fID09ICJfX21haW5fXyI6CiAgICByYWlzZSBTeXN0ZW1FeGl0KG1haW4o
-KSkK
+#!/usr/bin/env python3
+"""
+t5_provision.py  --  Provision Cisco 400G-XP-LC (T5) over TL1.
+
+SANDBOX EDITION: run this DIRECTLY ON the lab box (10.252.254.207), which
+already reaches the NEs. It connects straight to <NE>:3082 over a raw socket --
+no SSH, no paramiko, stdlib only (Python 3.6+).
+
+Per-node flow (idempotent -- existing items are detected via RTRV and skipped):
+  login -> equip card -> equip PPMs -> opmode -> trunk freq + IS
+  -> client provision + IS -> logout.  Any non-tolerated DENY aborts the run.
+
+Credentials come from env vars (fallback to the lab defaults below):
+  TL1_UID  (default CISCO15)
+  TL1_PID  (default otbu+1)
+
+Usage:
+  python3 t5_provision.py --dry-run --only NE-77            # preview, no connect
+  python3 t5_provision.py --only NE-77 --power-up-only      # safe: only freq+IS
+  python3 t5_provision.py --only NE-77                      # full idempotent
+  python3 t5_provision.py                                   # all nodes
+"""
+
+from __future__ import annotations
+
+import argparse
+import itertools
+import os
+import re
+import socket
+import sys
+import time
+from dataclasses import dataclass
+
+
+# ===========================================================================
+# CONFIG
+# ===========================================================================
+
+@dataclass
+class Node:
+    ip: str
+    tl1_port: int = 3082
+    # AID grammar confirmed on NE-77: <shelf>-<slot>-<port>[-<sub>]
+    shelf: int = 2          # 400G-XP-LC is in SHELF 2
+    slot: int = 6           # ... SLOT 6  (SLOT-2-6)
+    trunk_port: int = 11    # trunk port 11 -> power up
+    client_port: int = 7    # client port 7 -> power up
+    freq_nm: str = "1530.33"
+    # PPMs to provision on a blank card. Scoped to the ports in use; on NE-77
+    # these already exist so they get skipped. For a blank card, list every
+    # client/trunk port the opmode references AND ensure the pluggable is
+    # physically present, else ENT-EQPT will DENY.  # CONFIRM
+    client_ppms: tuple = (7,)
+    trunk_ppms: tuple = (11,)
+    # Proven-valid operating-mode string read back from NE-77 (RTRV-OPMODE).
+    opmode: str = ("OPMODE=MXP,TRUNKOPMODE=11/M-200G&12/M-200G,"
+                   "CLIENTSETS=11/S1/OPM-100G&11/S2/OPM-100G&"
+                   "12/S3/OPM-100G&12/S4/OPM-100G")
+    name: str = ""
+
+
+NODES = [
+    # NE-77 confirmed: 400G-XP-LC at SLOT-2-6, trunk VFAC-2-6-11-1 (IS-NR,
+    # FREQ=1530.33), client AGGR-2-6-7-1.
+    Node(ip="10.252.254.77", shelf=2, slot=6, name="NE-77"),
+    # NE-74: card location NOT yet confirmed -- run RTRV-EQPT::ALL there and
+    # update shelf/slot before a live run.  # CONFIRM
+    Node(ip="10.252.254.74", shelf=2, slot=6, name="NE-74"),
+]
+
+
+# ===========================================================================
+# TL1 session (raw socket)
+# ===========================================================================
+
+class Tl1Error(Exception):
+    pass
+
+
+@dataclass
+class Tl1Response:
+    ctag: str
+    completion: str          # COMPLD | DENY | PRTL | RTRV | ""
+    error_code: str = ""
+    raw: str = ""
+
+    @property
+    def ok(self) -> bool:
+        return self.completion in ("COMPLD", "PRTL")
+
+
+_COMPLETION_RE = re.compile(r"^M\s+(\S+)\s+(COMPLD|DENY|PRTL|RTRV)\b", re.MULTILINE)
+_ERRCODE_RE = re.compile(r"^\s+([A-Z]{4})\b", re.MULTILINE)
+
+
+class TL1Session:
+    def __init__(self, sock, read_timeout=30.0, idle_gap=0.4, logger=None):
+        self._s = sock
+        self.read_timeout = read_timeout
+        self.idle_gap = idle_gap
+        self._log = logger or (lambda *_: None)
+        self._buf = ""
+        self._s.settimeout(0.5)
+
+    def send(self, command: str) -> None:
+        if not command.rstrip().endswith(";"):
+            command = command.rstrip() + ";"
+        self._log(">>> " + command)
+        self._s.sendall((command + "\r\n").encode("ascii", "replace"))
+
+    def _recv(self) -> str:
+        try:
+            chunk = self._s.recv(8192)
+        except socket.timeout:
+            return ""
+        except OSError:
+            return ""
+        return chunk.decode("ascii", "replace") if chunk else ""
+
+    def read_response(self, ctag: str) -> Tl1Response:
+        """Read until the response block for THIS ctag terminates with ';'.
+
+        Matches the exact ctag so the async alarm/event storm (A / ** / *C
+        messages, e.g. SIGLOSS/SQUELCHED after bringing a port IS) is skipped
+        rather than mistaken for our completion.
+        """
+        comp_re = re.compile(
+            r"^M\s+{}\s+(COMPLD|DENY|PRTL|RTRV)\b".format(re.escape(str(ctag))),
+            re.MULTILINE)
+        deadline = time.monotonic() + self.read_timeout
+        block, self._buf = self._buf, ""
+
+        while time.monotonic() < deadline:
+            data = self._recv()
+            if data:
+                block += data
+                if ";" in block and comp_re.search(block):
+                    time.sleep(self.idle_gap)
+                    block += self._recv()
+                    return self._parse(block, ctag, comp_re)
+            else:
+                if block and ";" in block and comp_re.search(block):
+                    return self._parse(block, ctag, comp_re)
+                time.sleep(0.05)
+
+        raise Tl1Error("timeout waiting for ctag={}\n{}".format(ctag, block))
+
+    def _parse(self, block: str, ctag: str, comp_re) -> Tl1Response:
+        self._log(block.strip())
+        m = comp_re.search(block) or _COMPLETION_RE.search(block)
+        if not m:
+            return Tl1Response(ctag=ctag, completion="", raw=block)
+        completion = m.group(m.lastindex)
+        err = ""
+        if completion == "DENY":
+            em = _ERRCODE_RE.search(block[m.end():])
+            err = em.group(1) if em else ""
+        return Tl1Response(ctag=ctag, completion=completion,
+                           error_code=err, raw=block)
+
+
+# ===========================================================================
+# Command builder
+# ===========================================================================
+
+@dataclass
+class Step:
+    desc: str
+    action: str          # ENT/ED command, '{c}' marks the ctag slot
+    check: str = ""      # optional RTRV; COMPLD => entity exists => skip action
+    tolerate: tuple = () # DENY codes treated as success (e.g. SAIN already-IS)
+    config: bool = False # a config change (not a create or a power-up);
+                         # excluded from --power-up-only runs
+
+
+def build_sequence(node: Node, uid: str, pid: str):
+    s, sl = node.shelf, node.slot
+    card = "SLOT-{}-{}".format(s, sl)
+    # CONFIRMED on NE-77: trunk VFAC-2-6-11-1, client AGGR-2-6-7-1
+    trunk_aid = "VFAC-{}-{}-{}-1".format(s, sl, node.trunk_port)
+    client_aid = "AGGR-{}-{}-{}-1".format(s, sl, node.client_port)
+
+    steps = [Step("login", "ACT-USER::{}:{{c}}::{}".format(uid, pid))]
+
+    steps.append(Step("equip card 400G-XP-LC",
+                      "ENT-EQPT::{}:{{c}}::400G-XP-LC".format(card),
+                      check="RTRV-EQPT::{}:{{c}}".format(card)))
+    for p in node.client_ppms:
+        aid = "APPM-{}-{}-{}".format(s, sl, p)
+        steps.append(Step("equip client PPM port {}".format(p),
+                          "ENT-EQPT::{}:{{c}}::PPM-1".format(aid),
+                          check="RTRV-EQPT::{}:{{c}}".format(aid)))
+    for p in node.trunk_ppms:
+        aid = "PPM-{}-{}-{}".format(s, sl, p)
+        steps.append(Step("equip trunk PPM port {}".format(p),
+                          "ENT-EQPT::{}:{{c}}::PPM-1".format(aid),
+                          check="RTRV-EQPT::{}:{{c}}".format(aid)))
+
+    steps.append(Step("set operating mode (MXP)",
+                      "ENT-OPMODE::{}:{{c}}:::{}".format(card, node.opmode),
+                      check="RTRV-OPMODE::{}:{{c}}".format(card)))
+
+    # Frequency is a config change: only meaningful while the trunk is OOS
+    # (blank card). On an already-IS/connected port the NE returns SROF
+    # ("cannot change config with port having connection") -- tolerated, since
+    # the freq is already what we want. Excluded entirely from --power-up-only.
+    steps.append(Step("set trunk wavelength",
+                      "ED-OTU4C2::{}:{{c}}:::FREQ={}".format(trunk_aid, node.freq_nm),
+                      tolerate=("SROF",), config=True))
+    steps.append(Step("trunk port IS (power up)",
+                      "ED-OTU4C2::{}:{{c}}::::IS".format(trunk_aid),
+                      tolerate=("SAIN",)))
+
+    steps.append(Step("provision client 100GIGE",
+                      "ENT-100GIGE::{}:{{c}}:::NUMOFLANES=4".format(client_aid),
+                      check="RTRV-100GIGE::{}:{{c}}".format(client_aid)))
+    steps.append(Step("client port IS (power up)",
+                      "ED-100GIGE::{}:{{c}}::::IS".format(client_aid),
+                      tolerate=("SAIN",)))
+
+    steps.append(Step("logout", "CANC-USER::{}:{{c}}".format(uid)))
+    return steps
+
+
+# ===========================================================================
+# Runner
+# ===========================================================================
+
+_ctag = itertools.count(1)
+
+
+def next_ctag() -> str:
+    return str(next(_ctag))
+
+
+def log(msg: str) -> None:
+    print(msg, flush=True)
+
+
+def provision_node(node, uid, pid, dry_run, power_up_only=False) -> bool:
+    label = node.name or node.ip
+    log("\n=== {} ({}:{}){} ===".format(
+        label, node.ip, node.tl1_port,
+        "  [POWER-UP ONLY]" if power_up_only else ""))
+    steps = build_sequence(node, uid, pid)
+    if power_up_only:
+        # keep only login, the IS power-ups, and logout
+        steps = [st for st in steps if not st.check and not st.config]
+
+    if dry_run:
+        n = itertools.count(1)
+        for st in steps:
+            if st.check:
+                log("  [{:>3}] {:26} CHECK: {};  (skip if COMPLD)".format(
+                    next(n), st.desc, st.check.replace("{c}", "_")))
+            extra = "   tolerate={}".format(",".join(st.tolerate)) if st.tolerate else ""
+            log("  [{:>3}] {:26} {};{}".format(
+                next(n), st.desc, st.action.replace("{c}", "_"), extra))
+        return True
+
+    sock = None
+    try:
+        log("  connect {}:{}".format(node.ip, node.tl1_port))
+        sock = socket.create_connection((node.ip, node.tl1_port), timeout=20)
+        sess = TL1Session(sock, logger=lambda m: log("    " + m))
+
+        for st in steps:
+            log("  -> " + st.desc)
+            if st.check:
+                ctag = next_ctag()
+                sess.send(st.check.replace("{c}", ctag))
+                if sess.read_response(ctag).ok:
+                    log("     already present -> skip")
+                    continue
+            ctag = next_ctag()
+            sess.send(st.action.replace("{c}", ctag))
+            resp = sess.read_response(ctag)
+            if not resp.ok:
+                if resp.error_code in st.tolerate:
+                    log("     tolerated ({})".format(resp.error_code))
+                    continue
+                raise Tl1Error("DENIED: {} (code={})\n       resp: {}".format(
+                    st.desc, resp.error_code or "?", resp.raw.strip()))
+            log("     OK (COMPLD)")
+        log("  === {}: COMPLETE ===".format(label))
+        return True
+
+    except Tl1Error as e:
+        log("  !! {}: TL1 failure -> {}".format(label, e))
+        return False
+    except OSError as e:
+        log("  !! {}: connection error -> {}".format(label, e))
+        return False
+    finally:
+        if sock:
+            try:
+                sock.close()
+            except OSError:
+                pass
+        log("  disconnected from {}".format(label))
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Provision 400G-XP-LC over TL1 (sandbox edition).")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print the TL1 commands without connecting")
+    ap.add_argument("--only", help="run only the node whose ip/name matches this")
+    ap.add_argument("--power-up-only", action="store_true",
+                    help="skip all ENT (create) steps; only set freq + bring IS")
+    args = ap.parse_args()
+
+    uid = os.environ.get("TL1_UID", "CISCO15")
+    pid = os.environ.get("TL1_PID", "otbu+1")
+
+    nodes = NODES
+    if args.only:
+        nodes = [n for n in NODES if args.only in (n.ip, n.name)]
+        if not nodes:
+            sys.exit("no node matches --only {!r}".format(args.only))
+
+    results = {}
+    aborted = False
+    for node in nodes:
+        name = node.name or node.ip
+        if aborted:
+            results[name] = None
+            continue
+        ok = provision_node(node, uid, pid, args.dry_run,
+                            power_up_only=args.power_up_only)
+        results[name] = ok
+        if not ok and not args.dry_run:
+            log("\n!! ABORTING RUN: {} failed; skipping remaining node(s).".format(name))
+            aborted = True
+
+    log("\n=== SUMMARY ===")
+    for name, ok in results.items():
+        status = "OK" if ok else ("SKIPPED" if ok is None else "FAILED")
+        log("  {}: {}".format(name, status))
+    return 0 if all(v for v in results.values()) else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
