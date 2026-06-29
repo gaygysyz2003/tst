@@ -17,7 +17,8 @@ Credentials come from env vars (fallback to the lab defaults below):
 Usage:
   python3 t5_provision.py --dry-run --only NE-77            # preview, no connect
   python3 t5_provision.py --only NE-77 --power-up-only      # safe: only freq+IS
-  python3 t5_provision.py --only NE-77                      # full idempotent
+  python3 t5_provision.py --only NE-77                      # full provision (idempotent)
+  python3 t5_provision.py --only NE-77 --teardown           # UNPROVISION (destructive)
   python3 t5_provision.py                                   # all nodes
 """
 
@@ -168,10 +169,12 @@ class TL1Session:
 class Step:
     desc: str
     action: str          # ENT/ED command, '{c}' marks the ctag slot
-    check: str = ""      # optional RTRV; COMPLD => entity exists => skip action
+    check: str = ""      # optional RTRV (see `delete` for the skip direction)
     tolerate: tuple = () # DENY codes treated as success (e.g. SAIN already-IS)
     config: bool = False # a config change (not a create or a power-up);
                          # excluded from --power-up-only runs
+    delete: bool = False # a teardown step. With a check, skip when the entity
+                         # is ABSENT (create steps skip when PRESENT).
 
 
 def build_sequence(node: Node, uid: str, pid: str):
@@ -223,6 +226,46 @@ def build_sequence(node: Node, uid: str, pid: str):
     return steps
 
 
+def build_teardown(node: Node, uid: str, pid: str):
+    """Reverse of provisioning (config-only): force the populated facilities
+    OOS, then delete the MXP operating mode -- which removes the trunk/client
+    facilities the opmode created. Leaves the card and PPMs equipped.
+
+    Each OOS step tolerates SAIN (already OOS) and IIAC (facility doesn't
+    exist), so the teardown is safe to re-run. DLT-OPMODE is skipped if no
+    opmode is present (delete + check).  CMDMDE=FRCD forces the OOS on a
+    connected/in-service port.
+    """
+    s, sl = node.shelf, node.slot
+    card = "SLOT-{}-{}".format(s, sl)
+    trunk_aid = "VFAC-{}-{}-{}-1".format(s, sl, node.trunk_port)
+    client_aid = "AGGR-{}-{}-{}-1".format(s, sl, node.client_port)
+
+    steps = [Step("login", "ACT-USER::{}:{{c}}::{}".format(uid, pid))]
+
+    # take the populated client OOS (only AGGR-2-6-7-1 exists on NE-77)
+    steps.append(Step("client port OOS (force)",
+                      "ED-100GIGE::{}:{{c}}:::CMDMDE=FRCD:OOS,DSBLD".format(client_aid),
+                      tolerate=("SAIN", "IIAC")))
+    # take both opmode trunks OOS (11 in use; 12 declared by the opmode)
+    steps.append(Step("trunk port 11 OOS (force)",
+                      "ED-OTU4C2::{}:{{c}}:::CMDMDE=FRCD:OOS,DSBLD".format(trunk_aid),
+                      tolerate=("SAIN", "IIAC")))
+    trunk2 = "VFAC-{}-{}-12-1".format(s, sl)
+    steps.append(Step("trunk port 12 OOS (force)",
+                      "ED-OTU4C2::{}:{{c}}:::CMDMDE=FRCD:OOS,DSBLD".format(trunk2),
+                      tolerate=("SAIN", "IIAC")))
+
+    # delete the operating mode -> tears down the MXP trunk/client facilities
+    steps.append(Step("delete operating mode",
+                      "DLT-OPMODE::{}:{{c}}".format(card),
+                      check="RTRV-OPMODE::{}:{{c}}".format(card),
+                      delete=True))
+
+    steps.append(Step("logout", "CANC-USER::{}:{{c}}".format(uid)))
+    return steps
+
+
 # ===========================================================================
 # Runner
 # ===========================================================================
@@ -238,22 +281,27 @@ def log(msg: str) -> None:
     print(msg, flush=True)
 
 
-def provision_node(node, uid, pid, dry_run, power_up_only=False) -> bool:
+def provision_node(node, uid, pid, dry_run, power_up_only=False,
+                   teardown=False) -> bool:
     label = node.name or node.ip
-    log("\n=== {} ({}:{}){} ===".format(
-        label, node.ip, node.tl1_port,
-        "  [POWER-UP ONLY]" if power_up_only else ""))
-    steps = build_sequence(node, uid, pid)
-    if power_up_only:
-        # keep only login, the IS power-ups, and logout
-        steps = [st for st in steps if not st.check and not st.config]
+    mode_tag = ("  [TEARDOWN]" if teardown
+                else "  [POWER-UP ONLY]" if power_up_only else "")
+    log("\n=== {} ({}:{}){} ===".format(label, node.ip, node.tl1_port, mode_tag))
+    if teardown:
+        steps = build_teardown(node, uid, pid)
+    else:
+        steps = build_sequence(node, uid, pid)
+        if power_up_only:
+            # keep only login, the IS power-ups, and logout
+            steps = [st for st in steps if not st.check and not st.config]
 
     if dry_run:
         n = itertools.count(1)
         for st in steps:
             if st.check:
-                log("  [{:>3}] {:26} CHECK: {};  (skip if COMPLD)".format(
-                    next(n), st.desc, st.check.replace("{c}", "_")))
+                hint = "skip if absent" if st.delete else "skip if COMPLD"
+                log("  [{:>3}] {:26} CHECK: {};  ({})".format(
+                    next(n), st.desc, st.check.replace("{c}", "_"), hint))
             extra = "   tolerate={}".format(",".join(st.tolerate)) if st.tolerate else ""
             log("  [{:>3}] {:26} {};{}".format(
                 next(n), st.desc, st.action.replace("{c}", "_"), extra))
@@ -270,7 +318,11 @@ def provision_node(node, uid, pid, dry_run, power_up_only=False) -> bool:
             if st.check:
                 ctag = next_ctag()
                 sess.send(st.check.replace("{c}", ctag))
-                if sess.read_response(ctag).ok:
+                exists = sess.read_response(ctag).ok
+                if st.delete and not exists:
+                    log("     not present -> skip")
+                    continue
+                if not st.delete and exists:
                     log("     already present -> skip")
                     continue
             ctag = next_ctag()
@@ -308,6 +360,9 @@ def main() -> int:
     ap.add_argument("--only", help="run only the node whose ip/name matches this")
     ap.add_argument("--power-up-only", action="store_true",
                     help="skip all ENT (create) steps; only set freq + bring IS")
+    ap.add_argument("--teardown", action="store_true",
+                    help="UNPROVISION: force ports OOS + delete the MXP opmode "
+                         "(keeps card+PPMs). Destructive -- drops traffic.")
     args = ap.parse_args()
 
     uid = os.environ.get("TL1_UID", "CISCO15")
@@ -327,7 +382,8 @@ def main() -> int:
             results[name] = None
             continue
         ok = provision_node(node, uid, pid, args.dry_run,
-                            power_up_only=args.power_up_only)
+                            power_up_only=args.power_up_only,
+                            teardown=args.teardown)
         results[name] = ok
         if not ok and not args.dry_run:
             log("\n!! ABORTING RUN: {} failed; skipping remaining node(s).".format(name))
