@@ -1,4 +1,3 @@
-cat > t5_menu.py <<'MENUEOF'
 #!/usr/bin/env python3
 """
 t5_menu.py -- interactive engineer menu for the 400G-XP-LC TL1 tool.
@@ -8,8 +7,9 @@ Needs the engine (t5_configuration.py) in the same directory.
 
 Auto-discovers every 400G-XP-LC card on the chosen node and prints a FULL
 INVENTORY (trunk + client ports, pluggable type, service state, what is
-provisioned vs available), then lets the engineer pick a 100G client port and
-a build-up / teardown / power-up action -- each verified against the node.
+provisioned vs available). The engineer then picks a 100G client port and a
+build-up / teardown / power-up action -- each verified against the node by the
+engine.
 """
 
 import os
@@ -22,6 +22,8 @@ except ImportError:
     import t5_provision as t5          # dev/repo name
 
 
+# ---- response parsing helpers --------------------------------------------
+
 def _state_of(resp):
     if not resp.ok:
         return "NOT PROVISIONED"
@@ -30,12 +32,15 @@ def _state_of(resp):
 
 
 def _state_in_line(raw, aid):
+    """Service state from the line in `raw` that names `aid`."""
     for line in raw.splitlines():
         if aid + ":" in line:
             m = re.findall(r"((?:IS|OOS)-[A-Z]+(?:,[A-Z]+)?)", line)
             return m[-1] if m else "?"
     return "?"
 
+
+# ---- TL1 plumbing ---------------------------------------------------------
 
 def _open_session(node, uid, pid):
     sock = socket.create_connection((node.ip, node.tl1_port), timeout=20)
@@ -53,6 +58,8 @@ def _q(sess, cmd):
     sess.send("{}:{}".format(cmd, ctag))
     return sess.read_response(ctag)
 
+
+# ---- discovery: full inventory of each 400G-XP-LC card --------------------
 
 def discover(node, uid, pid):
     sock, sess = _open_session(node, uid, pid)
@@ -78,7 +85,7 @@ def discover(node, uid, pid):
                 ppm = cn.group(1) if cn else "(empty)"
                 sm = re.findall(r"((?:IS|OOS)-[A-Z]+(?:,[A-Z]+)?)", line)
                 ppm_state = sm[-1] if sm else "?"
-                if prefix == "APPM":
+                if prefix == "APPM":                       # client pluggable
                     is100 = ("100G" in ppm) and ("4X10G" not in ppm)
                     fac = "AGGR-{}-{}-{}-1".format(sh, sl, port)
                     if clients_all.ok and (fac + ":") in clients_all.raw:
@@ -87,7 +94,7 @@ def discover(node, uid, pid):
                         fac, fac_state = None, None
                     clients.append(dict(port=port, ppm=ppm, ppm_state=ppm_state,
                                         is100g=is100, facility=fac, fac_state=fac_state))
-                else:
+                else:                                      # PPM = trunk pluggable
                     tf = _q(sess, "RTRV-OTU4C2::VFAC-{}-{}-{}-1".format(sh, sl, port))
                     opr = re.search(r"OPR=([^,]+)", tf.raw)
                     trunks.append(dict(port=port, ppm=ppm,
@@ -107,6 +114,8 @@ def discover(node, uid, pid):
         except OSError:
             pass
 
+
+# ---- display + selection --------------------------------------------------
 
 def _show_inventory(node, card):
     print("\n  ============================================================")
@@ -136,6 +145,7 @@ def _show_inventory(node, card):
 
 
 def _pick_client(card):
+    """Choose a 100G-capable client port to act on (auto if only one)."""
     opts = [c for c in card["clients"] if c["is100g"]]
     if not opts:
         print("  >> no 100G-capable client ports are populated on this card.")
@@ -165,6 +175,8 @@ def _confirm_and_run(node, uid, pid, teardown, power_up_only, prompt, destructiv
     print("\n  >>> {}: {}".format(node.name, "SUCCESS (verified)" if ok else "FAILED"))
 
 
+# ---- main menu loop -------------------------------------------------------
+
 def run_menu(uid, pid):
     print("\n=========================================")
     print(" T5 / 400G-XP-LC Provisioning Menu")
@@ -173,19 +185,25 @@ def run_menu(uid, pid):
         print("\nNodes:")
         for i, n in enumerate(t5.NODES, 1):
             print("  {}) {:8} {}".format(i, n.name or n.ip, n.ip))
-        sel = input("Select node (number, or 'q' to quit): ").strip().lower()
-        if sel in ("q", "quit", ""):
+        print("  or type any IP (e.g. 10.252.254.80) to target an unlisted node")
+        sel = input("Select node number / IP (or 'q' to quit): ").strip()
+        if sel.lower() in ("q", "quit", ""):
             print("bye."); return 0
-        try:
-            node = t5.NODES[int(sel) - 1]
-        except (ValueError, IndexError):
-            print("  invalid selection"); continue
+        if re.match(r"^\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?$", sel):
+            ip, _, port = sel.partition(":")
+            node = t5.Node(ip=ip, tl1_port=int(port) if port else 3082, name=ip)
+            print("  (ad-hoc node {} -- shelf/slot auto-discovered)".format(ip))
+        else:
+            try:
+                node = t5.NODES[int(sel) - 1]
+            except (ValueError, IndexError):
+                print("  invalid selection"); continue
 
         print("\nConnecting to {} ({}) -- discovering inventory ...".format(
             node.name or node.ip, node.ip))
         try:
             cards = discover(node, uid, pid)
-        except Exception as e:
+        except Exception as e:                    # noqa: BLE001
             print("  !! could not reach {} over TL1: {}".format(node.ip, e))
             continue
         if not cards:
@@ -240,12 +258,13 @@ def run_menu(uid, pid):
             else:
                 print("  invalid choice"); continue
 
+            # re-discover so the inventory reflects what just happened
             try:
                 cards = discover(node, uid, pid)
                 card = next((c for c in cards
                              if c["shelf"] == node.shelf and c["slot"] == node.slot),
                             cards[0] if cards else card)
-            except Exception:
+            except Exception:                     # noqa: BLE001
                 pass
 
 
@@ -257,6 +276,3 @@ if __name__ == "__main__":
     except (KeyboardInterrupt, EOFError):
         print("\nbye.")
         raise SystemExit(0)
-MENUEOF
-python3 -m py_compile t5_menu.py && echo "COMPILE OK"
-sha256sum t5_menu.py
