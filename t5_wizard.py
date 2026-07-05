@@ -2,7 +2,7 @@
 """
 t5_wizard.py -- state-driven progressive-disclosure provisioning wizard for the
 Cisco 400G-XP-LC (T5) over TL1.  SELF-CONTAINED: stdlib only, no other files
-needed.  Run it directly on the sandbox (10.252.254.207), which reaches the NEs.
+needed, runs on Python 3.6+.  Run it on a host that reaches the NEs.
 
 Unlike a fixed build-up / teardown recipe, this walks a *decision tree whose
 options are computed from the node's live state*: it shows the card, then each
@@ -23,25 +23,22 @@ Run:  python3 t5_wizard.py
 Env:  TL1_UID (default CISCO15), TL1_PID (default otbu+1)
 """
 
-from __future__ import annotations
-
 import itertools
 import os
 import re
 import socket
 import time
-from dataclasses import dataclass, field
 
 
 # ===========================================================================
 # CONFIG -- nodes
 # ===========================================================================
 
-@dataclass
-class Node:
-    ip: str
-    tl1_port: int = 3082
-    name: str = ""
+class Node(object):
+    def __init__(self, ip, tl1_port=3082, name=""):
+        self.ip = ip
+        self.tl1_port = tl1_port
+        self.name = name
 
 
 NODES = [
@@ -58,15 +55,15 @@ class Tl1Error(Exception):
     pass
 
 
-@dataclass
-class Tl1Response:
-    ctag: str
-    completion: str          # COMPLD | DENY | PRTL | RTRV | ""
-    error_code: str = ""
-    raw: str = ""
+class Tl1Response(object):
+    def __init__(self, ctag, completion, error_code="", raw=""):
+        self.ctag = ctag
+        self.completion = completion      # COMPLD | DENY | PRTL | RTRV | ""
+        self.error_code = error_code
+        self.raw = raw
 
     @property
-    def ok(self) -> bool:
+    def ok(self):
         return self.completion in ("COMPLD", "PRTL")
 
 
@@ -74,7 +71,7 @@ _COMPLETION_RE = re.compile(r"^M\s+(\S+)\s+(COMPLD|DENY|PRTL|RTRV)\b", re.MULTIL
 _ERRCODE_RE = re.compile(r"^\s+([A-Z]{4})\b", re.MULTILINE)
 
 
-class TL1Session:
+class TL1Session(object):
     def __init__(self, sock, read_timeout=30.0, idle_gap=0.4, logger=None):
         self._s = sock
         self.read_timeout = read_timeout
@@ -83,13 +80,13 @@ class TL1Session:
         self._buf = ""
         self._s.settimeout(0.5)
 
-    def send(self, command: str) -> None:
+    def send(self, command):
         if not command.rstrip().endswith(";"):
             command = command.rstrip() + ";"
         self._log(">>> " + command)
         self._s.sendall((command + "\r\n").encode("ascii", "replace"))
 
-    def _recv(self) -> str:
+    def _recv(self):
         try:
             chunk = self._s.recv(8192)
         except socket.timeout:
@@ -98,7 +95,7 @@ class TL1Session:
             return ""
         return chunk.decode("ascii", "replace") if chunk else ""
 
-    def read_response(self, ctag: str) -> Tl1Response:
+    def read_response(self, ctag):
         """Read until the response block for THIS ctag terminates with ';'.
 
         Matches the exact ctag so the async alarm/event storm (A / ** / *C
@@ -126,7 +123,7 @@ class TL1Session:
 
         raise Tl1Error("timeout waiting for ctag={}\n{}".format(ctag, block))
 
-    def _parse(self, block: str, ctag: str, comp_re) -> Tl1Response:
+    def _parse(self, block, ctag, comp_re):
         self._log(block.strip())
         m = comp_re.search(block) or _COMPLETION_RE.search(block)
         if not m:
@@ -143,7 +140,7 @@ class TL1Session:
 _ctag = itertools.count(1)
 
 
-def next_ctag() -> str:
+def next_ctag():
     return str(next(_ctag))
 
 
@@ -162,7 +159,7 @@ _STATE_RE = re.compile(r"((?:IS|OOS)-[A-Z]+(?:,[A-Z]+)?)")
 # TL1 helpers
 # ===========================================================================
 
-def _run(sess, template: str):
+def _run(sess, template):
     """Send a command template ('{c}' marks the ctag slot) and return response."""
     ctag = next_ctag()
     sess.send(template.replace("{c}", ctag))
@@ -178,7 +175,7 @@ def _open(node, uid, pid):
     return sock, sess
 
 
-def _state_of(resp) -> str | None:
+def _state_of(resp):
     """Service state (IS-NR / OOS-MA,DSBLD / ...) from an RTRV, or None if absent."""
     if not resp.ok:
         return None
@@ -190,28 +187,30 @@ def _state_of(resp) -> str | None:
 # Live state model
 # ===========================================================================
 
-@dataclass
-class Port:
-    port: int
-    kind: str                 # 'client' | 'trunk'
-    optic: str | None = None  # optic CARDNAME (physical pluggable), None if absent
-    facility: str | None = None   # facility AID if the port exists in the model
-    provisioned: bool = False     # facility actually provisioned on the NE
-    state: str | None = None      # service state string, or None if not provisioned
-    freq: str | None = None       # trunk only
+class Port(object):
+    def __init__(self, port, kind, optic=None, facility=None,
+                 provisioned=False, state=None, freq=None):
+        self.port = port
+        self.kind = kind              # 'client' | 'trunk'
+        self.optic = optic            # optic CARDNAME (physical pluggable), None if absent
+        self.facility = facility      # facility AID if the port exists in the model
+        self.provisioned = provisioned    # facility actually provisioned on the NE
+        self.state = state            # service state string, or None if not provisioned
+        self.freq = freq              # trunk only
 
 
-@dataclass
-class Card:
-    shelf: int
-    slot: int
-    opmode: str = ""              # e.g. "MXP"
-    trunkopmode: str = ""         # e.g. "11/M-200G&12/M-200G"
-    clientsets: str = ""
-    ports: list = field(default_factory=list)
+class Card(object):
+    def __init__(self, shelf, slot, opmode="", trunkopmode="", clientsets="", ports=None):
+        self.shelf = shelf
+        self.slot = slot
+        self.opmode = opmode          # e.g. "MXP"
+        self.trunkopmode = trunkopmode    # e.g. "11/M-200G&12/M-200G"
+        self.clientsets = clientsets
+        self.ports = ports if ports is not None else []
+        self.client_trunk = {}        # client port -> trunk port it rides on
 
 
-def _optic_of(eqpt_raw: str, aid: str) -> str | None:
+def _optic_of(eqpt_raw, aid):
     """CARDNAME (physical optic) on the APPM/PPM line for `aid`, else None."""
     for line in eqpt_raw.splitlines():
         if aid + ":" in line:
@@ -220,7 +219,7 @@ def _optic_of(eqpt_raw: str, aid: str) -> str | None:
     return None
 
 
-def discover(node, uid, pid) -> list:
+def discover(node, uid, pid):
     """Log in and build a live model of every 400G-XP-LC card on the node."""
     sock, sess = _open(node, uid, pid)
     try:
@@ -241,6 +240,13 @@ def discover(node, uid, pid) -> list:
                         opmode=mode.group(1) if mode else "",
                         trunkopmode=top.group(1) if top else "",
                         clientsets=cset.group(1) if cset else "")
+
+            # map each client slice to the trunk it rides on, from CLIENTSETS
+            # (e.g. 11/S1/OPM-100G&...&12/S3/OPM-100G -> {7:11, 8:11, 9:12, 10:12})
+            for tk, sn in re.findall(r"(\d+)/S(\d+)/", card.clientsets):
+                cp = SLICE_TO_CLIENT.get(int(sn))
+                if cp:
+                    card.client_trunk[cp] = int(tk)
 
             # trunk ports come straight from TRUNKOPMODE (e.g. 11/M-200G&12/M-200G)
             trunk_ports = [int(p) for p in re.findall(r"(\d+)/", card.trunkopmode)]
@@ -287,11 +293,11 @@ def discover(node, uid, pid) -> list:
 # Decision core: which actions are legal for a port RIGHT NOW
 # ===========================================================================
 
-def _is_up(state: str | None) -> bool:
+def _is_up(state):
     return bool(state) and state.startswith("IS")
 
 
-def available_actions(port: Port) -> list:
+def available_actions(port):
     """Return [(key, label, destructive)] legal for this port given live state.
 
     This is the heart of the progressive wizard: options are COMPUTED from the
@@ -323,7 +329,7 @@ def available_actions(port: Port) -> list:
 # Apply handlers -- only TL1 syntax proven live on NE-77
 # ===========================================================================
 
-def _apply_client(sess, port: Port, key: str, freq: str | None = None) -> bool:
+def _apply_client(sess, port, key, freq=None):
     aid = port.facility
     if key == "build":
         if not _run(sess, "ENT-100GIGE::{}:{{c}}:::NUMOFLANES=4".format(aid)).ok:
@@ -343,7 +349,7 @@ def _apply_client(sess, port: Port, key: str, freq: str | None = None) -> bool:
     return False
 
 
-def _apply_trunk(sess, port: Port, key: str, freq: str | None = None) -> bool:
+def _apply_trunk(sess, port, key, freq=None):
     aid = port.facility
     if key == "setfreq":
         _run(sess, "ED-OTU4C2::{}:{{c}}:::FREQ={}".format(aid, freq))  # tolerate SROF
@@ -357,16 +363,131 @@ def _apply_trunk(sess, port: Port, key: str, freq: str | None = None) -> bool:
     return False
 
 
-def _verify(sess, rtrv_template: str, want: str) -> bool:
+def _verify(sess, rtrv_template, want):
     resp = _run(sess, rtrv_template)
     return resp.ok and want in resp.raw
+
+
+# ===========================================================================
+# Guided flow: walk the engineer through building one client service, applying
+# and verifying each step, skipping whatever live state shows is already done.
+# ===========================================================================
+
+def _guided_run(sess, template, verify_template=None, want=None, tolerate=()):
+    """Apply one command, tolerate expected DENYs, then optionally verify."""
+    resp = _run(sess, template)
+    if not resp.ok and resp.error_code not in tolerate:
+        return False, "DENIED " + (resp.error_code or "?")
+    if verify_template:
+        v = _run(sess, verify_template)
+        if not (v.ok and (want in v.raw if want else True)):
+            return False, "verify failed"
+    return True, "ok"
+
+
+def guided_build(node, uid, pid, card):
+    clients = [p for p in card.ports if p.kind == "client" and p.optic]
+    if not clients:
+        print("  no client ports have an optic to build on.")
+        return
+
+    print("\n  Guided: provision a client service")
+    for i, p in enumerate(clients, 1):
+        tk = card.client_trunk.get(p.port, "?")
+        print("    {}) client port {} (rides trunk {})  --  {}".format(
+            i, p.port, tk, p.state or "not provisioned"))
+    sel = input("  Which client port? (or 'q'): ").strip().lower()
+    if sel in ("q", "quit", ""):
+        return
+    try:
+        client = clients[int(sel) - 1]
+    except (ValueError, IndexError):
+        print("  invalid selection")
+        return
+
+    tport = card.client_trunk.get(client.port)
+    trunk = next((p for p in card.ports
+                  if p.kind == "trunk" and p.port == tport), None)
+
+    # --- build the plan from live state: skip anything already done ---
+    plan = []          # list of (step_key, human description)
+    freq = None
+    if trunk and not _is_up(trunk.state):
+        cur = trunk.freq or "(unset)"
+        f = input("  Trunk {} is {}. Frequency in nm [{}], Enter=keep: ".format(
+            trunk.port, trunk.state or "?", cur)).strip()
+        freq = f or trunk.freq
+        if freq:
+            plan.append(("trunk_freq",
+                         "set trunk {} FREQ={}".format(trunk.port, freq)))
+        plan.append(("trunk_up", "bring trunk {} in service".format(trunk.port)))
+    elif trunk:
+        print("  Step: trunk {} already in service (FREQ={}) -- skipping.".format(
+            trunk.port, trunk.freq))
+    if not client.provisioned:
+        plan.append(("client_create",
+                     "create 100GIGE facility on client {}".format(client.port)))
+    if not _is_up(client.state):
+        plan.append(("client_up",
+                     "bring client {} in service".format(client.port)))
+
+    if not plan:
+        print("  client {} is already fully in service -- nothing to do.".format(
+            client.port))
+        return
+
+    print("\n  Plan (each step is applied AND verified before the next):")
+    for i, (k, desc) in enumerate(plan, 1):
+        print("    {}. {}".format(i, desc))
+    if input("  proceed? [y/N]: ").strip().lower() not in ("y", "yes"):
+        print("  cancelled")
+        return
+
+    caid = client.facility
+    taid = trunk.facility if trunk else None
+    sock, sess = _open(node, uid, pid)
+    try:
+        done = True
+        for k, desc in plan:
+            print("  -> {}".format(desc))
+            if k == "trunk_freq":
+                ok, msg = _guided_run(
+                    sess, "ED-OTU4C2::{}:{{c}}:::FREQ={}".format(taid, freq),
+                    tolerate=("SROF",))
+            elif k == "trunk_up":
+                ok, msg = _guided_run(
+                    sess, "ED-OTU4C2::{}:{{c}}::::IS".format(taid),
+                    "RTRV-OTU4C2::{}:{{c}}".format(taid), "IS", tolerate=("SAIN",))
+            elif k == "client_create":
+                ok, msg = _guided_run(
+                    sess, "ENT-100GIGE::{}:{{c}}:::NUMOFLANES=4".format(caid),
+                    "RTRV-100GIGE::{}:{{c}}".format(caid))
+            elif k == "client_up":
+                ok, msg = _guided_run(
+                    sess, "ED-100GIGE::{}:{{c}}::::IS".format(caid),
+                    "RTRV-100GIGE::{}:{{c}}".format(caid), "IS", tolerate=("SAIN",))
+            else:
+                ok, msg = False, "unknown step"
+            print("     {}".format("OK (verified)" if ok else "FAILED: " + msg))
+            if not ok:
+                print("  !! stopping guided build here; earlier steps stand.")
+                done = False
+                break
+        if done:
+            print("\n  >>> client {} service provisioned & verified.".format(
+                client.port))
+    finally:
+        try:
+            sock.close()
+        except OSError:
+            pass
 
 
 # ===========================================================================
 # Display + interactive loop
 # ===========================================================================
 
-def _show_card(card: Card):
+def _show_card(card):
     print("\n  ============================================================")
     print("  SLOT-{}-{}  {}   opmode: {} (trunks {})".format(
         card.shelf, card.slot, CARD_TYPE, card.opmode, card.trunkopmode))
@@ -385,12 +506,14 @@ def _show_card(card: Card):
                 tag = "available (build up)"
             else:
                 tag = p.state
-            print("   {:>2}) CLIENT port {:<2}  {:<26}  {:<12}  [{}]".format(
-                i, p.port, optic, p.facility, tag))
+            tk = card.client_trunk.get(p.port)
+            trunk_note = "  (trunk {})".format(tk) if tk else ""
+            print("   {:>2}) CLIENT port {:<2}  {:<26}  {:<12}  [{}]{}".format(
+                i, p.port, optic, p.facility, tag, trunk_note))
     print("  ============================================================")
 
 
-def _act_on_port(node, uid, pid, card: Card, port: Port):
+def _act_on_port(node, uid, pid, card, port):
     acts = available_actions(port)
     if not acts:
         print("  >> no actions available for this port (no optic present).")
@@ -405,20 +528,24 @@ def _act_on_port(node, uid, pid, card: Card, port: Port):
     try:
         key, label, destr = acts[int(sel) - 1]
     except (ValueError, IndexError):
-        print("  invalid selection"); return
+        print("  invalid selection")
+        return
 
     freq = None
     if key == "setfreq":
         freq = input("  frequency (nm, e.g. 1530.33): ").strip()
         if not freq:
-            print("  cancelled"); return
+            print("  cancelled")
+            return
 
     if destr:
         if input("  '{}' -- type 'yes' to confirm: ".format(label)).strip().lower() != "yes":
-            print("  cancelled"); return
+            print("  cancelled")
+            return
     else:
         if input("  {} [y/N]: ".format(label)).strip().lower() not in ("y", "yes"):
-            print("  cancelled"); return
+            print("  cancelled")
+            return
 
     sock, sess = _open(node, uid, pid)
     try:
@@ -432,7 +559,7 @@ def _act_on_port(node, uid, pid, card: Card, port: Port):
     print("  >>> {}: {}".format(label, "OK (verified)" if ok else "FAILED / not verified"))
 
 
-def run(uid, pid) -> int:
+def run(uid, pid):
     print("\n=========================================")
     print(" T5 / 400G-XP-LC  state-driven wizard")
     print("=========================================")
@@ -442,22 +569,26 @@ def run(uid, pid) -> int:
             print("  {}) {:8} {}".format(i, n.name or n.ip, n.ip))
         sel = input("Select node (number, IP, or 'q'): ").strip()
         if sel.lower() in ("q", "quit", ""):
-            print("bye."); return 0
+            print("bye.")
+            return 0
         if re.match(r"^\d{1,3}(?:\.\d{1,3}){3}$", sel):
             node = Node(ip=sel, name=sel)
         else:
             try:
                 node = NODES[int(sel) - 1]
             except (ValueError, IndexError):
-                print("  invalid selection"); continue
+                print("  invalid selection")
+                continue
 
         print("\nConnecting to {} -- discovering ...".format(node.name or node.ip))
         try:
             cards = discover(node, uid, pid)
         except Exception as e:                        # noqa: BLE001
-            print("  !! could not reach {}: {}".format(node.ip, e)); continue
+            print("  !! could not reach {}: {}".format(node.ip, e))
+            continue
         if not cards:
-            print("  no {} cards found.".format(CARD_TYPE)); continue
+            print("  no {} cards found.".format(CARD_TYPE))
+            continue
 
         card = cards[0]
         if len(cards) > 1:
@@ -471,20 +602,24 @@ def run(uid, pid) -> int:
 
         while True:
             _show_card(card)
-            sel = input("\n  Pick a port number to act on, 'r' refresh, 'b' back: ").strip().lower()
+            sel = input("\n  Pick a port number, 'g' guided build, 'r' refresh, 'b' back: ").strip().lower()
             if sel in ("b", "back"):
                 break
             if sel in ("r", "refresh", ""):
                 pass
+            elif sel in ("g", "guided"):
+                guided_build(node, uid, pid, card)
             else:
                 try:
                     pi = int(sel)
                     if 1 <= pi <= len(card.ports):
                         _act_on_port(node, uid, pid, card, card.ports[pi - 1])
                     else:
-                        print("  invalid selection"); continue
+                        print("  invalid selection")
+                        continue
                 except ValueError:
-                    print("  invalid selection"); continue
+                    print("  invalid selection")
+                    continue
             # re-discover so the next menu reflects what just changed
             try:
                 cards = discover(node, uid, pid)
