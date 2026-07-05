@@ -1,0 +1,72 @@
+# 400G-XP-LC option enumerations (from EPNM, NE-77 / oln01enwdcola / SHELF-2 SLOT-6)
+
+Source: EPNM Configuration screens, captured 2026-06-30. These are the option
+lists the progressive-disclosure wizard must offer at each level. TL1 syntax to
+apply them is in `t5_provision.py` (proven on NE-77) + `NCS_2k_TL1_Guide.pdf`.
+
+## Current NE-77 state (baseline)
+- Card: `6: 400G-XP-LC` at RACK-1 / SHELF-2 / slot 6.
+- Line ports (Configuration > Line > Ports):
+  - `2/6/11/1 (TRUNK) OTU4C2` — Admin UP, Service **IS-NR**, ALS DISABLED
+  - `2/6/12/1 (TRUNK) OTU4C2` — Admin DOWN, Service **OOS-MA**, ALS DISABLED
+  - `2/6/7/1 (CLIENT) 100GIGE` — Admin UP, Service **OOS-AU,FLT**, ALS DISABLED
+- OTN Lines: both trunks FEC **SD-25-DE-OFF**, SD BER 1E-7, SF BER 1E-5.
+- Circuits: `engltodenv` (OCH-Trail WSON, Up), `engtoprkr` (OCH-Trail WSON, Down).
+
+## Decision levels + option sets
+1. **Pluggable Port Modules** (equip PPM per port). Equipped now:
+   port 5 = QSFP-4X10G, port 7 = QSFP-100G, port 11 = CFP2, port 12 = CFP2.
+   → PPM type options seen: `QSFP-4X10G`, `QSFP-100G`, `CFP2`.
+2. **Card Operating Mode** (the big branch). Current row:
+   Card Mode `MXP`, Trunks `11:M-200G` `12:M-200G`,
+   Slices `1:OPM-100G(7) 2:OPM-100G(8) 3:OPM-100G(9) 4:OPM-100G(10)`, Peer N/A.
+   → maps to TL1 `OPMODE=MXP,TRUNKOPMODE=11/M-200G&12/M-200G,CLIENTSETS=11/S1/OPM-100G&11/S2/OPM-100G&12/S3/OPM-100G&12/S4/OPM-100G`.
+   Trunk-rate token seen: `M-200G` (need to confirm which rates CFP2 allows: M-100G/200G/300G/400G).
+3. **Line port Admin state** (per port): `DOWN`, `TESTING`, `UP`, `UP AINS`.
+   → TL1: DOWN=OOS,DSBLD; UP=IS; UP AINS=IS,AINS.
+4. **ALS Mode** (per port): `AUTO`, `DISABLED`, `MANUAL RESTART`, `MANUAL RESTART FOR TEST`.
+5. **Wavelength / frequency** (trunk): dropdown incl. `First Tunable Wavelength`,
+   `1530.33`, `1302.000`, `1310.000`, `1528.773`, `1529.163`, `1529.553`, … (full grid).
+   → TL1: `ED-OTU4C2::VFAC-…:::FREQ=<nm>`.
+6. **Client Reach / payload type** (100GIGE client): `AUTOPROV`, `DWDM` (current),
+   `CWDM`, `100GBASE-SR4/-LR4/-SR10/-SRBD`, `40GBASE-FR/-LR4/-SR4/-SRBD`, plus a
+   long PPM-specific list (P1I1-2D1, P1L1-*, P1S1-*, SR, IR-2, TEN-GE-*, *GFC-*, etc.).
+7. **Fault Signaling** (client): `AIS`, `DISABLE`, `Generic AIS`, `LF`, `NONE`,
+   `NOS`, `NOT APPLICABLE`, `ODU AIS` (current), `SQUELCH`.
+
+## LIVE FINDINGS (telnet, NE-77, 2026-07-01)
+- **The node enumerates NOTHING.** Every RTRV returns current state only:
+  RTRV-OPMODE = the one current MXP string; RTRV-OTU4C2 = FREQ=1530.33 single
+  value (GRIDLESS=DISABLE); RTRV-PPM = **DENY IICM** (verb does not exist).
+  → Option catalog for the wizard MUST come from this file/docs. Node supplies
+  current state + physical-optic presence + post-apply verification only.
+- **AID grammar (confirmed):** card `SLOT-2-6`; trunk pluggable `PPM-2-6-{11,12}`;
+  client pluggable `APPM-2-6-{port}`; trunk facility `VFAC-2-6-{port}-1` (OTU4C2);
+  client facility `AGGR-2-6-{port}-1` (100GIGE); opmode on `SLOT-2-6`.
+- **Port population on SLOT-2-6:** 5=QSFP-4X10G optic; 7=QSFP-100G optic +
+  AGGR-2-6-7-1 IS-NR; 8 & 9 = PPM container but NO optic, no facility (OOS-AUMA,UAS);
+  10 = no PPM. Trunk 11 IS-NR (FREQ=1530.33, circuit engltodenv up), 12 OOS.
+- **Parse note:** provisioned lines end `...:IS-NR,` (trailing comma); unpopulated
+  end `...:OOS-AUMA,UAS` (no trailing comma). RTRV-EQPT::ALL paginates with a `>`
+  continuation and repeats the `M <ctag> COMPLD` header per page.
+- Trunk facility full param set (RTRV-OTU4C2): FEC=SD-25-DE-OFF, OSFBER=1E-5,
+  OSDBER=1E-7, FREQ, LOSSB=DWDM, SQUELCHMODE=ODU-AIS, PORTMODE=DWDM-TRANS-AIS,
+  GRIDLESS=DISABLE. Client (RTRV-100GIGE): MTU, NUMOFLANES=4, SOAK.
+
+## DENY codes + preconditions (telnet 2026-07-03)
+- `SDBE` "Facility Is Not Provisioned" — RTRV/DLT on an absent facility. This is
+  the "available, not yet provisioned" signal (→ wizard offers **create**).
+- `IDNV` "PPM Does Not Exist" — ENT-100GIGE on a client port with **no physical
+  optic**. **Precondition: a 100G optic must be physically present** (APPM line
+  has a 100G CARDNAME) before a 100GIGE facility can be created. PPM-1 container
+  being EQUIP is NOT enough.
+- `IICM` "Invalid MOD1" — verb/modifier not supported (e.g. RTRV-PPM).
+- Consequence for live testing: ports 8/9 (no optic) and 10 (no PPM) cannot be
+  built out without inserting optics. Port 7 is currently the ONLY client port
+  with a 100G optic, and it is already provisioned (IS-NR). To exercise a full
+  build-from-scratch, either tear down & rebuild port 7, or insert optics in 8/9/10.
+
+## Still open (test destructively later)
+- Which trunk rates a CFP2 allows (M-100G/200G/300G/400G) — not enumerable, from docs.
+- ENT-OPMODE on a truly blank card (can't re-test here: DLT-OPMODE blocked by
+  cross-connect SNVS on this in-service card).
